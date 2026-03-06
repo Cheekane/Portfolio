@@ -3,194 +3,626 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Brian Park</title>
+    <title>Brian Park — Software Engineer</title>
+    <meta name="description" content="Brian Park — Software Engineer. Projects, resume, and contact.">
+    <meta property="og:title" content="Brian Park — Software Engineer">
+    <meta property="og:description" content="Software Engineer. Builder of things.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap"
+          rel="stylesheet">
     <style>
+        :root {
+            --bg: #1a1a1a;
+            --ink: #e8e8e8;
+            --muted: #777777;
+            --accent: #e8e8e8;
+            --accent-hover: #aaaaaa;
+            --card-bg: #242424;
+            --border: #333333;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--ink);
             line-height: 1.6;
-            color: #333;
-            background: #fff
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-logo {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--ink);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 2rem 1rem
+            padding: 5rem 2rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 4rem;
+            align-items: start;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.7s 0.1s forwards;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 3rem
+        .hero-text h1 {
+            font-family: 'DM Mono', monospace;
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            font-weight: 500;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.25rem;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: .5rem
+        .hero-text h1 span {
+            color: var(--muted);
         }
 
-        .subtitle {
-            color: #666;
-            font-size: 1.1rem;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+        .hero-tagline {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-tagline .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: var(--ink);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
         }
 
         .social-links {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
+            gap: 1rem;
         }
 
         .social-link {
-            display: inline-block;
-            color: #333;
-            transition: transform .2s, opacity .2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 4px;
+            color: var(--ink);
+            text-decoration: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            transition: border-color 0.2s, color 0.2s, transform 0.15s;
+            background: var(--card-bg);
         }
 
         .social-link:hover {
+            border-color: #666666;
+            color: #cccccc;
             transform: translateY(-2px);
-            opacity: .8;
         }
 
         .social-link svg {
-            width: 24px;
-            height: 24px;
+            width: 14px;
+            height: 14px;
         }
 
-        .profile-section {
+        /* ── PROFILE CARD ── */
+        .profile-card {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            gap: 0.75rem;
         }
 
-        .profile-img-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: .5rem;
-            border-radius: 4px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, .3);
+        .profile-img-frame {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border);
+            cursor: pointer;
+        }
+
+        .profile-img-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.06) 0%, transparent 60%);
+            pointer-events: none;
         }
 
         .profile-img {
-            height: 12rem;
-        }
-
-        .resume-section {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 3rem;
-        }
-
-        .resume {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .resume-img {
-            max-width: 600px;
             width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 4px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
-            transition: transform .2s, box-shadow .2s
+            height: 100%;
+            object-fit: cover;
+            image-rendering: pixelated;
         }
 
-        .resume-img:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, .15)
+        .profile-caption {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-align: center;
+            max-width: 160px;
+            line-height: 1.4;
+            font-style: italic;
         }
 
-        .projects {
+        /* ── SECTION COMMON ── */
+        section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ── PROJECTS ── */
+        #projects {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.7s 0.3s forwards;
+        }
+
+        .projects-grid {
             display: grid;
-            grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
         }
 
-        .project-link {
+        .project-card a {
             display: block;
             text-decoration: none;
-            color: inherit
+            color: inherit;
+        }
+
+        .project-img-wrap {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+            background: var(--border);
         }
 
         .project-img {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
-            display: block
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .project-card:hover .project-img {
+            transform: scale(1.04);
+        }
+
+        .project-img-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(26, 24, 20, 0.5) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover .project-img-overlay {
+            opacity: 1;
+        }
+
+        .project-arrow {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            background: #555555;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .project-card:hover .project-arrow {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-arrow svg {
+            width: 14px;
+            height: 14px;
+            color: #fff;
         }
 
         .project-info {
-            padding: 1.5rem
+            padding: 1.25rem 1.5rem 1.5rem;
         }
 
         .project-title {
-            font-size: 1.3rem;
-            margin-bottom: .5rem;
-            color: #222
+            font-family: 'DM Mono', monospace;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.35rem;
+            color: var(--ink);
         }
 
         .project-desc {
-            color: #666;
-            font-size: .95rem
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--muted);
         }
 
+        /* ── RESUME ── */
+        #resume {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.7s 0.5s forwards;
+        }
+
+        .resume-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .resume-img-link {
+            display: block;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1.5px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .resume-img-link:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            border-color: #666666;
+        }
+
+        .resume-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .resume-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--ink);
+            color: var(--bg);
+            text-decoration: none;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .resume-cta:hover {
+            background: #3a3a3a;
+            transform: translateY(-2px);
+        }
+
+        .resume-cta svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 3rem 1.25rem 2rem;
             }
 
-            .projects {
-                grid-template-columns:1fr
+            .profile-card {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+
+            .profile-caption {
+                max-width: 200px;
+            }
+
+            nav {
+                padding: 0.75rem 1.25rem;
+            }
+
+            .nav-links {
+                gap: 1.25rem;
+            }
+
+            section {
+                padding: 2.5rem 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                display: none;
+            }
+
+            .profile-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .hero {
+                padding: 2rem 1rem 1.5rem;
+                gap: 1.5rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+                gap: 0.6rem;
+            }
+
+            .social-link {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .profile-img-frame {
+                width: 120px;
+                height: 120px;
+            }
+
+            .overlay-text {
+                font-size: 0.62rem;
+            }
+
+            .profile-caption {
+                font-size: 0.62rem;
+                max-width: 100%;
+            }
+
+            section {
+                padding: 2rem 1rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resume-img-link {
+                max-width: 100%;
+            }
+
+            .resume-cta {
+                width: 100%;
+                justify-content: center;
+                font-size: 0.7rem;
+                padding: 0.65rem 1rem;
+            }
+
+            nav {
+                padding: 0.6rem 1rem;
+            }
+
+            footer {
+                font-size: 0.65rem;
+                padding: 1.5rem 1rem;
             }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <header>
-        <h1>Brian Park</h1>
-        <section class="profile-section">
-            <div class="profile-img-container">
-                <img src="images/chopped_16x16.webp" alt="chopped_brian_picture" class="profile-img"/>
-            </div>
-        </section>
-        <p class="subtitle">Software Engineer?</p>
+
+<!-- NAV -->
+<nav>
+    <a href="#" class="nav-logo">BP</a>
+    <ul class="nav-links">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#resume">Resume</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-text">
+        <h1>Brian<br><span>Park.</span></h1>
+        <p class="hero-tagline">Software Engineer<span class="cursor"></span></p>
         <div class="social-links">
             <a href="https://github.com/cheekane" target="_blank" rel="noopener" class="social-link"
                aria-label="GitHub">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
+                GitHub
             </a>
             <a href="https://linkedin.com/in/brianpark1101" target="_blank" rel="noopener" class="social-link"
                aria-label="LinkedIn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
+                LinkedIn
             </a>
         </div>
-    </header>
-    <section class="projects" id="projects"></section>
+    </div>
+
+    <div class="profile-card">
+        <div class="profile-img-frame">
+            <img src="images/chopped_16x16.webp" alt="Brian Park profile photo" class="profile-img"/>
+        </div>
+        <p class="profile-caption">
+            Intentionally a 16x16 webp <br>
+            (optimized for speed)
+        </p>
+    </div>
 </div>
+
+<!-- PROJECTS -->
+<section id="projects">
+    <p class="section-label">// work</p>
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid" id="projects-grid"></div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+    <p class="section-label">// background</p>
+    <h2 class="section-title">Resume</h2>
+    <div class="resume-inner">
+        <a href="https://drive.google.com/file/d/1lLlVRijHN5parD9eeqWtaL0NepZ3kc8D/view?usp=sharing"
+           target="_blank" rel="noopener" class="resume-img-link" aria-label="View full resume on Google Drive">
+            <img src="images/Brian_Park_Resume.webp" alt="Brian Park resume preview" class="resume-img" loading="lazy">
+        </a>
+        <a href="https://drive.google.com/file/d/1lLlVRijHN5parD9eeqWtaL0NepZ3kc8D/view?usp=sharing"
+           target="_blank" rel="noopener" class="resume-cta">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            View Full Resume
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2025 Brian Park &nbsp;·&nbsp; Built with care &amp; 16×16 WebPs</p>
+</footer>
+
 <script>
     const projects = [
         {
             title: "LondonKPC EM Website",
             desc: "Our church's website",
-            img: "images/londonkpc.webp",
-            url: "https://d28ok6bsrcpsar.cloudfront.net/"
+            img: "images/londonkpc_website.webp",
+            url: "https://dbeyd77w6ztuv.cloudfront.net"
         },
         {
             title: "TeeTimeBooker",
@@ -199,21 +631,29 @@
             url: "https://github.com/mandutree/teetimebooker"
         },
     ];
-    const container = document.getElementById("projects");
+
+    const grid = document.getElementById("projects-grid");
     projects.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "project";
-        div.innerHTML = `<a href="${p.url}" target="_blank" rel="noopener" class="project-link"><img src="${p.img}" alt="${p.title}" class="project-img" loading="lazy"><div class="project-info"><h2 class="project-title">${p.title}</h2><p class="project-desc">${p.desc}</p></div></a>`;
-        container.appendChild(div);
+        const card = document.createElement("div");
+        card.className = "project-card";
+        card.innerHTML = `
+            <a href="${p.url}" target="_blank" rel="noopener" aria-label="View project: ${p.title}">
+                <div class="project-img-wrap">
+                    <img src="${p.img}" alt="${p.title}" class="project-img" loading="lazy">
+                    <div class="project-img-overlay"></div>
+                    <div class="project-arrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">${p.title}</h3>
+                    <p class="project-desc">${p.desc}</p>
+                </div>
+            </a>`;
+        grid.appendChild(card);
     });
 </script>
-<section class="resume-section" id="resume">
-    <div class="resume">
-        <a href="https://drive.google.com/file/d/1Y_JFLjBxvonJXEGCM_qJ4QeDxm9ZgFov/view?usp=drive_link"
-           target="_blank" rel="noopener" class="">
-            <img src="images/resume.webp" alt="brian_park_resume" class="resume-img" loading="lazy">
-        </a>
-    </div>
-</section>
 </body>
 </html>
