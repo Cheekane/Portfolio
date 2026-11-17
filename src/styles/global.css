@@ -19,6 +19,9 @@
   --ring: rgb(24 24 27 / 0.08);
   --shadow: 0 1px 2px rgb(24 24 27 / 0.04), 0 8px 24px -12px rgb(24 24 27 / 0.1);
 
+  /* Hairlines of the page frame: the hatched rails and the full width rules. */
+  --frame-line: rgb(24 24 27 / 0.07);
+
   /* The one accent: teal. Used for links, eyebrows, the main button and focus. */
   --accent: #0f766e;
   --accent-strong: #115e59;
@@ -54,6 +57,8 @@
     --ring: rgb(255 255 255 / 0.1);
     --shadow: none;
 
+    --frame-line: rgb(255 255 255 / 0.09);
+
     --accent: #2dd4bf;
     --accent-strong: #5eead4;
     --accent-soft: rgb(45 212 191 / 0.1);
@@ -74,6 +79,9 @@ html {
 }
 
 body {
+  /* Anchors the rails, which sit behind the page content. */
+  position: relative;
+  isolation: isolate;
   margin: 0;
   background: var(--bg);
   color: var(--body);
@@ -84,6 +92,61 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-wrap: break-word;
+}
+
+/*
+ * The page frame: a hatched rail down each side of the content column, the
+ * full length of the page. On wide screens the rails stand just outside the
+ * column; on tablets they narrow to fit the page margin; on phones, where
+ * there is no margin to spare, they are left out.
+ */
+body::before,
+body::after {
+  --edge: max(var(--gutter), calc(50% - var(--page) / 2));
+  --gap: calc(var(--gutter) / 2);
+  --rail: min(2.5rem, calc(var(--edge) - var(--gap)));
+
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  z-index: -1;
+  width: var(--rail);
+  border-inline: 1px solid var(--frame-line);
+  background: repeating-linear-gradient(
+      315deg,
+      var(--frame-line) 0,
+      var(--frame-line) 1px,
+      transparent 0,
+      transparent 50%
+    )
+    0 0 / 10px 10px;
+  pointer-events: none;
+}
+
+body::before {
+  left: calc(var(--edge) - var(--gap) - var(--rail));
+}
+
+body::after {
+  right: calc(var(--edge) - var(--gap) - var(--rail));
+}
+
+@media (max-width: 39.99rem) {
+  body::before,
+  body::after {
+    content: none;
+  }
+}
+
+/* A hairline that runs the full width of the window, crossing the rails. */
+.rule-below {
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(var(--frame-line), var(--frame-line)) 1 / 0 0 1px / 0 100vw;
+}
+
+.rule-above {
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(var(--frame-line), var(--frame-line)) 1 / 1px 0 0 / 0 100vw;
 }
 
 h1,
