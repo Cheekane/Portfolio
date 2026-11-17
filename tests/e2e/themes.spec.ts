@@ -2,8 +2,8 @@ import AxeBuilder from '@axe-core/playwright';
 import { caseStudies, expect, test } from './fixtures';
 
 const themes = [
-  { colorScheme: 'light', background: 'rgb(248, 247, 243)' },
-  { colorScheme: 'dark', background: 'rgb(17, 18, 16)' },
+  { colorScheme: 'light', background: 'rgb(250, 250, 250)' },
+  { colorScheme: 'dark', background: 'rgb(9, 9, 11)' },
 ] as const;
 
 const paths = ['/', ...caseStudies.map((study) => `/work/${study.id}/`), '/404.html'];

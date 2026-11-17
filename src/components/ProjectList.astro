@@ -55,8 +55,8 @@ const { projects } = Astro.props;
     overflow: hidden;
     aspect-ratio: 16 / 10;
     background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
+    border-radius: var(--radius-card);
+    box-shadow: 0 0 0 1px var(--ring);
   }
 
   .shot :global(img) {
@@ -72,26 +72,28 @@ const { projects } = Astro.props;
   }
 
   .years {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
   }
 
   h3 {
-    font-size: var(--step-2);
-    line-height: 1.2;
-    margin-top: 0.125rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.4;
   }
 
   h3 a {
-    text-decoration: none;
+    color: var(--ink);
+    font-weight: inherit;
   }
 
   h3 a:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
+    color: var(--accent);
+    text-decoration: none;
   }
 
   .summary {
-    margin-block: 0.625rem 1rem;
+    margin-block: 0.5rem 1rem;
     max-width: 34rem;
   }
 

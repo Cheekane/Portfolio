@@ -1,6 +1,5 @@
 ---
 import '@fontsource-variable/inter/wght.css';
-import '@fontsource/instrument-serif/400.css';
 import '../styles/global.css';
 import { profile } from '../data/profile';
 
@@ -10,9 +9,11 @@ interface Props {
   description?: string;
   /** Set on the 404 page so search engines skip it. */
   noindex?: boolean;
+  /** The home page section this page belongs to, shown as current in the header. */
+  section?: 'experience' | 'projects';
 }
 
-const { title, description = profile.description, noindex = false } = Astro.props;
+const { title, description = profile.description, noindex = false, section } = Astro.props;
 
 const fullTitle = title ? `${title} | ${profile.name}` : `${profile.name} | ${profile.title}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -53,8 +54,8 @@ const person = {
     <meta name="author" content={profile.name} />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 
-    <meta name="theme-color" content="#f8f7f3" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#111210" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
@@ -75,7 +76,7 @@ const person = {
     <script type="application/ld+json" is:inline set:html={JSON.stringify(person)} />
   </head>
   <body>
-    <a class="skip" href="#main">
+    <a class="skip button" href="#main">
       Skip to content
     </a>
     <header class="site-header wrap">
@@ -86,7 +87,9 @@ const person = {
         <ul>
           {nav.map((item) => (
             <li>
-              <a href={item.href}>{item.label}</a>
+              <a href={item.href} aria-current={item.href === `/#${section}` ? 'true' : undefined}>
+                {item.label}
+              </a>
             </li>
           ))}
         </ul>
@@ -128,11 +131,6 @@ const person = {
     left: var(--gutter);
     top: -4rem;
     z-index: 10;
-    padding: 0.5rem 0.875rem;
-    background: var(--ink);
-    color: var(--bg);
-    border-radius: 6px;
-    text-decoration: none;
   }
 
   .skip:focus {
@@ -142,35 +140,59 @@ const person = {
   .site-header {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 0.5rem 2rem;
-    padding-block: 1.5rem;
+    padding-block: 1.25rem;
   }
 
   .home {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    line-height: 1.2;
+    font-size: 1rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+
+  .home:hover {
+    color: var(--ink);
     text-decoration: none;
   }
 
   nav ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem 1.5rem;
+    gap: 0.25rem;
+    margin-inline: -0.75rem;
   }
 
   nav a {
     display: inline-block;
-    padding-block: 0.25rem;
-    font-size: 0.9375rem;
-    color: var(--muted);
-    text-decoration: none;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--body);
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
   }
 
   nav a:hover {
+    background: var(--fill);
     color: var(--ink);
+    text-decoration: none;
+  }
+
+  /* The section a case study belongs to. */
+  nav a[aria-current] {
+    color: var(--accent);
+  }
+
+  /* On the home page, the section the address points at (for example /#about). */
+  :global(body:has(#experience:target)) nav a[href='/#experience'],
+  :global(body:has(#projects:target)) nav a[href='/#projects'],
+  :global(body:has(#about:target)) nav a[href='/#about'],
+  :global(body:has(#contact:target)) nav a[href='/#contact'] {
+    color: var(--accent);
   }
 
   .site-footer {
@@ -178,10 +200,10 @@ const person = {
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 0.75rem 2rem;
-    margin-top: clamp(4rem, 10vw, 8rem);
+    margin-top: clamp(4rem, 10vw, 7rem);
     padding-block: 2rem 3rem;
-    border-top: 1px solid var(--rule);
-    font-size: 0.9375rem;
+    border-top: 1px solid var(--divider);
+    font-size: 0.875rem;
     color: var(--muted);
   }
 
@@ -190,14 +212,23 @@ const person = {
     gap: 1.5rem;
   }
 
+  .site-footer a {
+    color: var(--body);
+  }
+
+  .site-footer a:hover {
+    color: var(--accent);
+  }
+
   /* Keep the four links on one row on the narrowest phones. */
   @media (max-width: 22.5rem) {
     nav ul {
-      column-gap: 0.875rem;
+      margin-inline: -0.5rem;
+      gap: 0;
     }
 
     nav a {
-      font-size: 0.875rem;
+      padding-inline: 0.5rem;
     }
   }
 </style>

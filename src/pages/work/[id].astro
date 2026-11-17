@@ -60,7 +60,11 @@ const todoLinks = study.links.filter((link) => !link.href);
 const hasResults = study.results.length > 0 || study.outcomes.length > 0;
 ---
 
-<Base title={page.title} description={page.description}>
+<Base
+  title={page.title}
+  description={page.description}
+  section={page.kind === 'Project' ? 'projects' : 'experience'}
+>
   <article data-testid="case-study" data-id={page.id}>
     <header class="wrap top">
       <p>
@@ -68,7 +72,7 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
           <span aria-hidden="true">&larr;</span> All work
         </a>
       </p>
-      <p class="label rise">
+      <p class="eyebrow rise">
         {page.kind} <span aria-hidden="true">/</span> {page.period}
       </p>
       <h1 class="rise" style="--i: 1">
@@ -87,7 +91,7 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
         <ul class="links" data-testid="case-links">
           {links.map((link) => (
             <li>
-              <a class="arrow-link" href={link.href} rel="noopener">
+              <a class="button secondary" href={link.href} rel="noopener">
                 {link.label}
                 <span class="arrow" aria-hidden="true">
                   &rarr;
@@ -226,57 +230,58 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
 <style>
   .top {
     display: grid;
-    gap: 1rem;
-    padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3.5rem);
+    gap: 0.875rem;
+    padding-block: clamp(1.5rem, 5vw, 3rem) clamp(2rem, 5vw, 3.5rem);
   }
 
   .back {
     display: inline-block;
     padding-block: 0.25rem;
     margin-bottom: clamp(1rem, 4vw, 2.5rem);
-    font-size: 0.9375rem;
-    color: var(--muted);
-    text-decoration: none;
+    font-size: 0.875rem;
+    color: var(--body);
   }
 
   .back:hover {
-    color: var(--ink);
+    color: var(--accent);
+    text-decoration: none;
   }
 
   h1 {
     font-size: var(--step-4);
-    line-height: 1;
-    letter-spacing: -0.015em;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
   }
 
   .subtitle {
-    margin-top: -0.25rem;
+    font-size: 0.875rem;
   }
 
   .intro {
     font-size: var(--step-2);
-    line-height: 1.4;
-    max-width: 44rem;
-    margin-top: 0.75rem;
+    line-height: 1.6;
+    max-width: 42rem;
+    margin-top: 0.5rem;
   }
 
   .links {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.75rem 1.75rem;
+    align-items: center;
+    gap: 0.75rem;
     margin-top: 0.75rem;
   }
 
   .links li {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.25rem 0.75rem;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
   }
 
   .note {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
   }
 
   .facts {
@@ -285,26 +290,24 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
     gap: 1.5rem 2.5rem;
     margin-top: clamp(1.5rem, 4vw, 2.5rem);
     padding-top: 1.5rem;
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid var(--divider);
   }
 
   .facts dd {
     margin-top: 0.25rem;
     max-width: 26rem;
+    font-size: 0.9375rem;
   }
 
   .block {
     display: grid;
     gap: 1.25rem;
-    padding-block: clamp(2rem, 5vw, 3.5rem);
+    padding-block: clamp(2rem, 5vw, 3.25rem);
   }
 
   .block > h2 {
-    font-family: var(--font-body);
-    font-weight: 500;
-    line-height: 1.65;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--divider);
   }
 
   .content {
@@ -315,7 +318,6 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
     display: grid;
     gap: 1rem;
     max-width: 42rem;
-    font-size: var(--step-1);
   }
 
   .built {
@@ -329,14 +331,16 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
     padding-left: 1.5rem;
   }
 
+  /* A small accent dot instead of a default bullet. */
   .built li::before {
     content: '';
     position: absolute;
-    left: 0;
-    top: 0.78em;
-    width: 0.625rem;
-    height: 1px;
-    background: var(--muted);
+    left: 0.125rem;
+    top: 0.7em;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background: var(--accent);
   }
 
   .stack {
@@ -350,7 +354,9 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
   }
 
   .stack dt {
-    font-weight: 500;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
   }
 
   .results {
@@ -366,38 +372,46 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
   figure :global(img) {
     width: 100%;
     background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
+    border-radius: var(--radius-card);
+    box-shadow: 0 0 0 1px var(--ring);
   }
 
   figcaption {
     margin-top: 0.75rem;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     max-width: 42rem;
   }
 
   .next {
     display: grid;
-    gap: 0.5rem;
-    padding-top: clamp(2rem, 5vw, 3.5rem);
+    gap: 0.25rem;
+    padding-top: clamp(2rem, 5vw, 3.25rem);
   }
 
   .next .label {
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--divider);
+    color: var(--muted);
+    font-weight: 500;
   }
 
   .next a {
     display: inline-flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 0 0.75rem;
+    gap: 0 0.625rem;
     justify-self: start;
     max-width: 100%;
     overflow-wrap: anywhere;
-    font-family: var(--font-display);
+    color: var(--ink);
     font-size: var(--step-3);
-    line-height: 1.1;
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+
+  .next a:hover {
+    color: var(--accent);
     text-decoration: none;
   }
 
@@ -424,14 +438,8 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
     }
 
     .content {
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--rule);
-    }
-
-    /* The result figures draw their own rules. */
-    .content.results:has(> .results) {
-      padding-top: 0;
-      border-top: 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--divider);
     }
   }
 </style>

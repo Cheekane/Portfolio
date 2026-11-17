@@ -18,7 +18,7 @@ const { entries } = Astro.props;
       <div class="detail">
         <h3>{entry.company}</h3>
         {(entry.role || entry.location) && (
-          <p class="muted">{joinFacts([entry.role, entry.location])}</p>
+          <p class="role muted">{joinFacts([entry.role, entry.location])}</p>
         )}
         {entry.summary && <p class="summary">{entry.summary}</p>}
         {entry.caseStudy && (
@@ -41,7 +41,7 @@ const { entries } = Astro.props;
     display: grid;
     gap: 0.25rem;
     padding-block: 1.5rem;
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid var(--divider);
   }
 
   li:first-child {
@@ -54,13 +54,19 @@ const { entries } = Astro.props;
   }
 
   .period {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-variant-numeric: tabular-nums;
   }
 
   h3 {
-    font-size: var(--step-2);
-    line-height: 1.2;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.4;
+  }
+
+  .role {
+    font-size: 0.875rem;
   }
 
   .summary {
@@ -69,7 +75,7 @@ const { entries } = Astro.props;
   }
 
   .more {
-    margin-top: 0.875rem;
+    margin-top: 0.75rem;
   }
 
   @media (min-width: 40rem) {
@@ -79,7 +85,7 @@ const { entries } = Astro.props;
     }
 
     .period {
-      padding-top: 0.3rem;
+      padding-top: 0.2rem;
     }
   }
 </style>

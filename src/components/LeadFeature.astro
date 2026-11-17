@@ -15,15 +15,19 @@ const results = entry.caseStudy?.results.slice(0, 4) ?? [];
 ---
 
 <section class="wrap" aria-labelledby="lead-title" data-testid="lead" data-lead-id={entry.id}>
-  <div class="lead">
-    <p class="label">{entry.end ? 'Most recent' : 'Now'}</p>
+  <div class="lead card">
+    <p class="eyebrow">{entry.end ? 'Most recent' : 'Now'}</p>
     <h2 id="lead-title">{entry.company}</h2>
     <p class="meta">{joinFacts(meta)}</p>
     {entry.summary && <p class="summary">{entry.summary}</p>}
-    {results.length > 0 && <Results results={results} />}
+    {results.length > 0 && (
+      <div class="stats">
+        <Results results={results} />
+      </div>
+    )}
     {entry.caseStudy && (
       <p>
-        <a class="arrow-link" href={workPath(entry.id)}>
+        <a class="button" href={workPath(entry.id)}>
           Read the {entry.company} case study
           <span class="arrow" aria-hidden="true">
             &rarr;
@@ -37,31 +41,31 @@ const results = entry.caseStudy?.results.slice(0, 4) ?? [];
 <style>
   .lead {
     display: grid;
-    gap: 1.25rem;
+    gap: 1rem;
     padding: clamp(1.5rem, 4vw, 3rem);
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: calc(var(--radius) * 1.5);
   }
 
   h2 {
     font-size: var(--step-4);
-    margin-top: -0.5rem;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
   }
 
   .meta {
+    font-size: 0.875rem;
     color: var(--muted);
-    margin-top: -0.5rem;
   }
 
   .summary {
     font-size: var(--step-2);
-    line-height: 1.4;
-    max-width: 44rem;
-    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    max-width: 42rem;
   }
 
-  .lead > p:last-child {
-    margin-top: 0.75rem;
+  .stats {
+    margin-block: 1rem 0.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--divider);
   }
 </style>

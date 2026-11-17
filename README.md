@@ -10,7 +10,7 @@ job or project, and a playable Cell Growth Simulator demo.
 | Site       | [Astro](https://astro.build) with TypeScript (strict), built to static HTML |
 | Demo       | One React island, the only JavaScript sent to the browser                   |
 | Content    | Typed Astro content collections, written in YAML                            |
-| Fonts      | Instrument Serif and Inter, hosted with the site                            |
+| Fonts      | Inter, hosted with the site                                                 |
 | Tests      | Vitest (unit), Playwright and axe (end to end and accessibility)            |
 | Code style | ESLint, Prettier and `astro check`                                          |
 | Hosting    | Private S3 bucket behind CloudFront, described in `portfolio.yaml`          |

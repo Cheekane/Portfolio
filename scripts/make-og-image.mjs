@@ -19,11 +19,7 @@ const field = (name) => {
 const html = `<!doctype html>
 <style>
   @font-face {
-    font-family: Display;
-    src: url(${font('@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2')});
-  }
-  @font-face {
-    font-family: Body;
+    font-family: Inter;
     font-weight: 100 900;
     src: url(${font('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2')});
   }
@@ -31,14 +27,14 @@ const html = `<!doctype html>
   body {
     width: 1200px; height: 630px; padding: 80px 88px;
     display: flex; flex-direction: column; justify-content: space-between;
-    background: #f8f7f3; color: #191815; font-family: Body;
+    background: #fafafa; color: #18181b; font-family: Inter;
   }
-  .label { font-size: 22px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: #5f5d57; }
-  h1 { font-family: Display; font-weight: 400; font-size: 190px; line-height: 0.95; letter-spacing: -0.02em; margin-left: -8px; }
-  .foot { display: flex; justify-content: space-between; align-items: baseline; padding-top: 28px; border-top: 1px solid #dedbd2; font-size: 26px; }
-  .foot span:last-child { color: #23513f; font-weight: 500; }
+  .eyebrow { font-size: 28px; font-weight: 600; color: #0f766e; }
+  h1 { font-weight: 700; font-size: 148px; line-height: 1; letter-spacing: -0.045em; margin-left: -6px; }
+  .foot { display: flex; justify-content: space-between; align-items: baseline; padding-top: 28px; border-top: 1px solid #e4e4e7; font-size: 26px; color: #52525b; }
+  .foot span:last-child { color: #18181b; font-weight: 600; }
 </style>
-<p class="label">${field('title')}</p>
+<p class="eyebrow">${field('title')}</p>
 <h1>${field('name')}</h1>
 <p class="foot"><span>${field('location')}</span><span>cheekane.com</span></p>`;
 

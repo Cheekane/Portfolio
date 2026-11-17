@@ -11,8 +11,8 @@
   max-width: 30rem;
   aspect-ratio: 1;
   padding: 1px;
-  background: var(--rule);
-  border-radius: 6px;
+  background: var(--divider);
+  border-radius: 0.75rem;
   overflow: hidden;
 }
 
@@ -66,55 +66,57 @@
 .cg-button,
 .cg-field select {
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
   line-height: 1.4;
   color: var(--ink);
   background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--ring);
+  border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   min-height: 2.5rem;
   cursor: pointer;
   transition:
-    border-color 160ms ease,
-    background-color 160ms ease;
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .cg-button {
   min-width: 5.25rem;
-  font-weight: 500;
 }
 
 .cg-button:hover,
 .cg-field select:hover {
-  border-color: var(--muted);
+  background: var(--fill);
 }
 
+/* Matches the site's main button. */
 .cg-primary {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--bg);
+  background: var(--accent);
+  box-shadow: none;
+  color: var(--on-accent);
 }
 
 .cg-primary:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-strong);
 }
 
 .cg-field {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   color: var(--muted);
 }
 
 .cg-field select {
   padding-inline: 0.625rem;
+  font-weight: 500;
 }
 
 .cg-help {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   color: var(--muted);
 }
 
