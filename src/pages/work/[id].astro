@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import Results from '../../components/Results.astro';
 import CellGrowth from '../../demo/cell-growth/CellGrowth';
 import { formatRange } from '../../lib/dates';
+import { joinFacts } from '../../lib/text';
 import { getExperience, getProjects, workImage, workPath } from '../../lib/work';
 import type { CaseStudyPage } from '../../lib/work';
 
@@ -20,7 +21,7 @@ export const getStaticPaths = (async () => {
               id: entry.id,
               kind: 'Experience' as const,
               title: entry.company,
-              subtitle: [entry.role, entry.location].filter(Boolean).join(' · '),
+              subtitle: joinFacts([entry.role, entry.location]),
               period: formatRange(entry.start, entry.end),
               description: entry.summary ?? entry.caseStudy.intro,
               caseStudy: entry.caseStudy,
@@ -32,7 +33,7 @@ export const getStaticPaths = (async () => {
       id: project.id,
       kind: 'Project' as const,
       title: project.name,
-      subtitle: project.tags.join(' · '),
+      subtitle: joinFacts(project.tags),
       period: project.years,
       description: project.summary,
       caseStudy: project.caseStudy,

@@ -108,10 +108,10 @@
       I did the repaint and refactor of the online storefront using Tailwind
       CSS.
     facts:
-      - label: Role
-        value: Full-Stack Software Engineer Intern, Sep 2024 to Aug 2025
-      - label: Platform
-        value: $2.5M+ in revenue
+      - label: Scale
+        value: A platform with $2.5M+ in revenue
+      - label: Length
+        value: 12 months, Sep 2024 to Aug 2025
     problem:
       - >-
         Getting data out of price lists was manual work that took more than 10

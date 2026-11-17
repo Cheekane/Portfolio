@@ -19,3 +19,10 @@ describe('dates', () => {
     expect(() => formatMonth('2026-13')).toThrow();
   });
 });
+
+describe('joinFacts', () => {
+  it('joins facts with a dot and skips missing ones', async () => {
+    const { joinFacts } = await import('@/lib/text');
+    expect(joinFacts(['Role', undefined, 'Remote'])).toBe('Role · Remote');
+  });
+});

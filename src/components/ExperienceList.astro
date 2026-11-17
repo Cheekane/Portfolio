@@ -1,5 +1,6 @@
 ---
 import { formatRange } from '../lib/dates';
+import { joinFacts } from '../lib/text';
 import { workPath } from '../lib/work';
 import type { Experience } from '../content/schema';
 
@@ -17,7 +18,7 @@ const { entries } = Astro.props;
       <div class="detail">
         <h3>{entry.company}</h3>
         {(entry.role || entry.location) && (
-          <p class="muted">{[entry.role, entry.location].filter(Boolean).join(' · ')}</p>
+          <p class="muted">{joinFacts([entry.role, entry.location])}</p>
         )}
         {entry.summary && <p class="summary">{entry.summary}</p>}
         {entry.caseStudy && (

@@ -190,9 +190,14 @@ const person = {
     gap: 1.5rem;
   }
 
-  @media (max-width: 30rem) {
+  /* Keep the four links on one row on the narrowest phones. */
+  @media (max-width: 22.5rem) {
     nav ul {
-      column-gap: 1.125rem;
+      column-gap: 0.875rem;
+    }
+
+    nav a {
+      font-size: 0.875rem;
     }
   }
 </style>

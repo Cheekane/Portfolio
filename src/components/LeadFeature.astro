@@ -1,6 +1,7 @@
 ---
 import Results from './Results.astro';
 import { formatRange } from '../lib/dates';
+import { joinFacts } from '../lib/text';
 import { workPath } from '../lib/work';
 import type { Experience } from '../content/schema';
 
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const meta = [entry.role, formatRange(entry.start, entry.end), entry.location].filter(Boolean);
+const meta = [entry.role, formatRange(entry.start, entry.end), entry.location];
 const results = entry.caseStudy?.results.slice(0, 4) ?? [];
 ---
 
@@ -17,7 +18,7 @@ const results = entry.caseStudy?.results.slice(0, 4) ?? [];
   <div class="lead">
     <p class="label">{entry.end ? 'Most recent' : 'Now'}</p>
     <h2 id="lead-title">{entry.company}</h2>
-    <p class="meta">{meta.join(' · ')}</p>
+    <p class="meta">{joinFacts(meta)}</p>
     {entry.summary && <p class="summary">{entry.summary}</p>}
     {results.length > 0 && <Results results={results} />}
     {entry.caseStudy && (
