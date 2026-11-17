@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Band from '../components/Band.astro';
 import Section from '../components/Section.astro';
 import LeadFeature from '../components/LeadFeature.astro';
 import ExperienceList from '../components/ExperienceList.astro';
@@ -53,6 +54,8 @@ const { education } = profile;
 
   {lead && <LeadFeature entry={lead} />}
 
+  <Band gap />
+
   <Section id="experience" title="Experience">
     <ExperienceList entries={experience} />
   </Section>
@@ -60,6 +63,8 @@ const { education } = profile;
   <Section id="projects" title="Projects">
     <ProjectList projects={projects} />
   </Section>
+
+  <Band />
 
   <Section id="skills" title="Skills">
     <dl class="skills">
@@ -92,6 +97,8 @@ const { education } = profile;
       ))}
     </div>
   </Section>
+
+  <Band />
 
   <Section id="resume" title="Resume">
     <div class="resume">

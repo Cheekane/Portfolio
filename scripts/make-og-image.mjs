@@ -29,7 +29,7 @@ const html = `<!doctype html>
     display: flex; flex-direction: column; justify-content: space-between;
     background: #fafafa; color: #18181b; font-family: Inter;
   }
-  .eyebrow { font-size: 28px; font-weight: 600; color: #0f766e; }
+  .eyebrow { font-size: 28px; font-weight: 600; color: #4f46e5; }
   h1 { font-weight: 700; font-size: 148px; line-height: 1; letter-spacing: -0.045em; margin-left: -6px; }
   .foot { display: flex; justify-content: space-between; align-items: baseline; padding-top: 28px; border-top: 1px solid #e4e4e7; font-size: 26px; color: #52525b; }
   .foot span:last-child { color: #18181b; font-weight: 600; }

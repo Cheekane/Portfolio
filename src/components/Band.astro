@@ -1,0 +1,69 @@
+---
+/*
+ * A hatched band across the full width of the window. It marks the few main
+ * breaks of a page (for example between the introduction and the work), and
+ * uses the same hatching as the side rails so the two read as one frame.
+ * Where it crosses a rail the hatching stops, leaving a clear square.
+ * Decoration only, so it is hidden from screen readers.
+ */
+interface Props {
+  /** Adds space above, for when the band follows something with no bottom padding. */
+  gap?: boolean;
+}
+
+const { gap = false } = Astro.props;
+---
+
+<div class:list={['band', { gap }]} aria-hidden="true"></div>
+
+<style>
+  .band {
+    position: relative;
+    /* As tall as a rail is wide, so the two cross in a square. */
+    height: var(--rail);
+    border-block: 1px solid var(--frame-line);
+    /* The solid colour hides the rails where they cross, so the hatching never doubles up. */
+    background: var(--hatch) var(--bg);
+  }
+
+  /* The joint: a clear, outlined square where the band crosses each rail. */
+  .band::before,
+  .band::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    width: var(--rail);
+    border-inline: 1px solid var(--frame-line);
+    background: var(--bg);
+  }
+
+  .band::before {
+    left: var(--rail-inset);
+  }
+
+  .band::after {
+    right: var(--rail-inset);
+  }
+
+  .gap {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  @media print, (forced-colors: active) {
+    .band {
+      display: none;
+    }
+  }
+
+  /* Phones have no rails, so there is nothing to cross. */
+  @media (max-width: 39.99rem) {
+    .band {
+      height: 1.5rem;
+    }
+
+    .band::before,
+    .band::after {
+      content: none;
+    }
+  }
+</style>

@@ -21,11 +21,19 @@
 
   /* Hairlines of the page frame: the hatched rails and the full width rules. */
   --frame-line: rgb(24 24 27 / 0.07);
+  --hatch: repeating-linear-gradient(
+      315deg,
+      var(--frame-line) 0,
+      var(--frame-line) 1px,
+      transparent 0,
+      transparent 50%
+    )
+    0 0 / 8px 8px;
 
-  /* The one accent: teal. Used for links, eyebrows, the main button and focus. */
-  --accent: #0f766e;
-  --accent-strong: #115e59;
-  --accent-soft: #f0fdfa;
+  /* The one accent: Tailwind's indigo. Used for links, eyebrows, the main button and focus. */
+  --accent: #4f46e5;
+  --accent-strong: #4338ca;
+  --accent-soft: #eef2ff;
   --on-accent: #ffffff;
 
   --font: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -42,6 +50,23 @@
   --page: 70rem;
   --radius: 0.75rem;
   --radius-card: 1rem;
+
+  /*
+   * Where the side rails stand (see "The page frame" below). The bands that
+   * cross the page use the same numbers, so the two always line up. Sizes are
+   * whole pixels and whole hatch tiles (8px), which keeps every hairline crisp.
+   * On tablets the rails are slim and sit at the edge of the screen.
+   */
+  --rail: 1rem;
+  --rail-inset: 0px;
+}
+
+/* From here the page margin is wide enough for full size rails beside the content. */
+@media (min-width: 80rem) {
+  :root {
+    --rail: 2.5rem;
+    --rail-inset: calc(50% - var(--page) / 2 - 1.5rem - var(--rail));
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -59,10 +84,10 @@
 
     --frame-line: rgb(255 255 255 / 0.09);
 
-    --accent: #2dd4bf;
-    --accent-strong: #5eead4;
-    --accent-soft: rgb(45 212 191 / 0.1);
-    --on-accent: #042f2e;
+    --accent: #818cf8;
+    --accent-strong: #a5b4fc;
+    --accent-soft: rgb(129 140 248 / 0.12);
+    --on-accent: #1e1b4b;
   }
 }
 
@@ -102,33 +127,22 @@ body {
  */
 body::before,
 body::after {
-  --edge: max(var(--gutter), calc(50% - var(--page) / 2));
-  --gap: calc(var(--gutter) / 2);
-  --rail: min(2.5rem, calc(var(--edge) - var(--gap)));
-
   content: '';
   position: absolute;
   inset-block: 0;
   z-index: -1;
   width: var(--rail);
   border-inline: 1px solid var(--frame-line);
-  background: repeating-linear-gradient(
-      315deg,
-      var(--frame-line) 0,
-      var(--frame-line) 1px,
-      transparent 0,
-      transparent 50%
-    )
-    0 0 / 10px 10px;
+  background: var(--hatch);
   pointer-events: none;
 }
 
 body::before {
-  left: calc(var(--edge) - var(--gap) - var(--rail));
+  left: var(--rail-inset);
 }
 
 body::after {
-  right: calc(var(--edge) - var(--gap) - var(--rail));
+  right: var(--rail-inset);
 }
 
 @media (max-width: 39.99rem) {
@@ -138,15 +152,18 @@ body::after {
   }
 }
 
-/* A hairline that runs the full width of the window, crossing the rails. */
+/* The frame is decoration, so it is dropped on paper and in high contrast modes. */
+@media print, (forced-colors: active) {
+  body::before,
+  body::after {
+    content: none;
+  }
+}
+
+/* A hairline under the header that runs the full width of the window, crossing the rails. */
 .rule-below {
   border-bottom: 1px solid transparent;
   border-image: linear-gradient(var(--frame-line), var(--frame-line)) 1 / 0 0 1px / 0 100vw;
-}
-
-.rule-above {
-  border-top: 1px solid transparent;
-  border-image: linear-gradient(var(--frame-line), var(--frame-line)) 1 / 1px 0 0 / 0 100vw;
 }
 
 h1,

@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import { Picture } from 'astro:assets';
+import Band from '../../components/Band.astro';
 import Base from '../../layouts/Base.astro';
 import Results from '../../components/Results.astro';
 import CellGrowth from '../../demo/cell-growth/CellGrowth';
@@ -120,6 +121,8 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
         </dl>
       )}
     </header>
+
+    <Band />
 
     {study.demo === 'cell-growth' && (
       <section class="wrap block" aria-labelledby="demo-title">
