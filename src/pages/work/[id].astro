@@ -1,0 +1,436 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Picture } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Results from '../../components/Results.astro';
+import CellGrowth from '../../demo/cell-growth/CellGrowth';
+import { formatRange } from '../../lib/dates';
+import { getExperience, getProjects, workImage, workPath } from '../../lib/work';
+import type { CaseStudyPage } from '../../lib/work';
+
+export const getStaticPaths = (async () => {
+  const experience = await getExperience();
+  const projects = await getProjects();
+
+  const pages: CaseStudyPage[] = [
+    ...experience.flatMap((entry) =>
+      entry.caseStudy
+        ? [
+            {
+              id: entry.id,
+              kind: 'Experience' as const,
+              title: entry.company,
+              subtitle: [entry.role, entry.location].filter(Boolean).join(' · '),
+              period: formatRange(entry.start, entry.end),
+              description: entry.summary ?? entry.caseStudy.intro,
+              caseStudy: entry.caseStudy,
+            },
+          ]
+        : [],
+    ),
+    ...projects.map((project) => ({
+      id: project.id,
+      kind: 'Project' as const,
+      title: project.name,
+      subtitle: project.tags.join(' · '),
+      period: project.years,
+      description: project.summary,
+      caseStudy: project.caseStudy,
+    })),
+  ];
+
+  return pages.map((page, index) => ({
+    params: { id: page.id },
+    // The next case study in the list, wrapping around at the end.
+    props: { page, next: pages[(index + 1) % pages.length] ?? page },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: CaseStudyPage;
+  next: CaseStudyPage;
+}
+
+const { page, next } = Astro.props;
+const study = page.caseStudy;
+const showTodos = import.meta.env.DEV;
+const links = study.links.filter((link) => link.href);
+const todoLinks = study.links.filter((link) => !link.href);
+const hasResults = study.results.length > 0 || study.outcomes.length > 0;
+---
+
+<Base title={page.title} description={page.description}>
+  <article data-testid="case-study" data-id={page.id}>
+    <header class="wrap top">
+      <p>
+        <a class="back" href={page.kind === 'Project' ? '/#projects' : '/#experience'}>
+          <span aria-hidden="true">&larr;</span> All work
+        </a>
+      </p>
+      <p class="label rise">
+        {page.kind} <span aria-hidden="true">/</span> {page.period}
+      </p>
+      <h1 class="rise" style="--i: 1">
+        {page.title}
+      </h1>
+      {page.subtitle && (
+        <p class="subtitle muted rise" style="--i: 2">
+          {page.subtitle}
+        </p>
+      )}
+      <p class="intro rise" style="--i: 3">
+        {study.intro}
+      </p>
+
+      {(links.length > 0 || (showTodos && todoLinks.length > 0)) && (
+        <ul class="links" data-testid="case-links">
+          {links.map((link) => (
+            <li>
+              <a class="arrow-link" href={link.href} rel="noopener">
+                {link.label}
+                <span class="arrow" aria-hidden="true">
+                  &rarr;
+                </span>
+              </a>
+              {link.note && <span class="note muted">{link.note}</span>}
+            </li>
+          ))}
+          {showTodos &&
+            todoLinks.map((link) => (
+              <li>
+                <span class="todo-slot">TODO: {link.label} link</span>
+              </li>
+            ))}
+        </ul>
+      )}
+
+      {study.facts.length > 0 && (
+        <dl class="facts">
+          {study.facts.map((fact) => (
+            <div>
+              <dt class="label">{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </header>
+
+    {study.demo === 'cell-growth' && (
+      <section class="wrap block" aria-labelledby="demo-title">
+        <h2 id="demo-title" class="label">
+          Try it
+        </h2>
+        <div class="content">
+          <CellGrowth client:visible />
+        </div>
+      </section>
+    )}
+
+    <section class="wrap block" aria-labelledby="problem-title">
+      <h2 id="problem-title" class="label">
+        The problem
+      </h2>
+      <div class="content prose">
+        {study.problem.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    </section>
+
+    <section class="wrap block" aria-labelledby="built-title">
+      <h2 id="built-title" class="label">
+        What I built
+      </h2>
+      <ul class="content built">
+        {study.built.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="wrap block" aria-labelledby="stack-title">
+      <h2 id="stack-title" class="label">
+        Stack
+      </h2>
+      <dl class="content stack">
+        {study.stack.map((group) => (
+          <div>
+            <dt>{group.label}</dt>
+            <dd>
+              <ul class="tags">
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    {hasResults && (
+      <section class="wrap block" aria-labelledby="results-title">
+        <h2 id="results-title" class="label">
+          Results
+        </h2>
+        <div class="content results">
+          {study.results.length > 0 && <Results results={study.results} />}
+          {study.outcomes.length > 0 && (
+            <ul class="built">
+              {study.outcomes.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+    )}
+
+    {(study.images.length > 0 || (showTodos && study.imageTodos.length > 0)) && (
+      <section class="wrap block" aria-labelledby="images-title">
+        <h2 id="images-title" class="label">
+          Screens
+        </h2>
+        <div class="content images">
+          {study.images.map((image) => (
+            <figure>
+              <Picture
+                src={workImage(image.file)}
+                alt={image.alt}
+                formats={['avif', 'webp']}
+                widths={[480, 800, 1200, 1600]}
+                sizes="(min-width: 56rem) 52rem, 92vw"
+              />
+              {image.caption && <figcaption class="muted">{image.caption}</figcaption>}
+            </figure>
+          ))}
+          {showTodos && study.imageTodos.map((todo) => <p class="todo-slot">TODO: {todo}</p>)}
+        </div>
+      </section>
+    )}
+
+    <nav class="wrap next" aria-label="More work">
+      <p class="label">Next</p>
+      <a href={workPath(next.id)}>
+        <span class="title">{next.title}</span>
+        <span class="arrow" aria-hidden="true">
+          &rarr;
+        </span>
+      </a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .top {
+    display: grid;
+    gap: 1rem;
+    padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .back {
+    display: inline-block;
+    padding-block: 0.25rem;
+    margin-bottom: clamp(1rem, 4vw, 2.5rem);
+    font-size: 0.9375rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .back:hover {
+    color: var(--ink);
+  }
+
+  h1 {
+    font-size: var(--step-4);
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+
+  .subtitle {
+    margin-top: -0.25rem;
+  }
+
+  .intro {
+    font-size: var(--step-2);
+    line-height: 1.4;
+    max-width: 44rem;
+    margin-top: 0.75rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem 1.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .links li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+  }
+
+  .note {
+    font-size: 0.9375rem;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1.5rem 2.5rem;
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .facts dd {
+    margin-top: 0.25rem;
+    max-width: 26rem;
+  }
+
+  .block {
+    display: grid;
+    gap: 1.25rem;
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .block > h2 {
+    font-family: var(--font-body);
+    font-weight: 500;
+    line-height: 1.65;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .content {
+    min-width: 0;
+  }
+
+  .prose {
+    display: grid;
+    gap: 1rem;
+    max-width: 42rem;
+    font-size: var(--step-1);
+  }
+
+  .built {
+    display: grid;
+    gap: 0.875rem;
+    max-width: 42rem;
+  }
+
+  .built li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .built li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.78em;
+    width: 0.625rem;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  .stack {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .stack div {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .stack dt {
+    font-weight: 500;
+  }
+
+  .results {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .images {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  figure :global(img) {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+  }
+
+  figcaption {
+    margin-top: 0.75rem;
+    font-size: 0.9375rem;
+    max-width: 42rem;
+  }
+
+  .next {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .next .label {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .next a {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.75rem;
+    justify-self: start;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.1;
+    text-decoration: none;
+  }
+
+  .next .arrow {
+    transition: transform 200ms ease;
+  }
+
+  .next a:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  @media (min-width: 40rem) {
+    .stack div {
+      grid-template-columns: 11.5rem minmax(0, 1fr);
+      gap: 2rem;
+      align-items: baseline;
+    }
+  }
+
+  @media (min-width: 56rem) {
+    .block {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: 3rem;
+    }
+
+    .content {
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    /* The result figures draw their own rules. */
+    .content.results:has(> .results) {
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
+</style>

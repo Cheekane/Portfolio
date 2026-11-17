@@ -1,0 +1,84 @@
+---
+import { formatRange } from '../lib/dates';
+import { workPath } from '../lib/work';
+import type { Experience } from '../content/schema';
+
+interface Props {
+  entries: readonly Experience[];
+}
+
+const { entries } = Astro.props;
+---
+
+<ol class="list" data-testid="experience-list">
+  {entries.map((entry) => (
+    <li data-id={entry.id}>
+      <p class="period muted">{formatRange(entry.start, entry.end)}</p>
+      <div class="detail">
+        <h3>{entry.company}</h3>
+        {(entry.role || entry.location) && (
+          <p class="muted">{[entry.role, entry.location].filter(Boolean).join(' · ')}</p>
+        )}
+        {entry.summary && <p class="summary">{entry.summary}</p>}
+        {entry.caseStudy && (
+          <p class="more">
+            <a class="arrow-link" href={workPath(entry.id)}>
+              Case study<span class="visually-hidden">: {entry.company}</span>
+              <span class="arrow" aria-hidden="true">
+                &rarr;
+              </span>
+            </a>
+          </p>
+        )}
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  li {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  li:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  li:last-child {
+    padding-bottom: 0;
+  }
+
+  .period {
+    font-size: 0.9375rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  h3 {
+    font-size: var(--step-2);
+    line-height: 1.2;
+  }
+
+  .summary {
+    margin-top: 0.625rem;
+    max-width: 38rem;
+  }
+
+  .more {
+    margin-top: 0.875rem;
+  }
+
+  @media (min-width: 40rem) {
+    li {
+      grid-template-columns: 11.5rem minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .period {
+      padding-top: 0.3rem;
+    }
+  }
+</style>

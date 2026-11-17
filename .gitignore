@@ -1,1 +1,10 @@
-.idea
+node_modules/
+dist/
+.astro/
+.DS_Store
+.idea/
+test-results/
+playwright-report/
+coverage/
+.env
+.env.*

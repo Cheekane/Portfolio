@@ -1,0 +1,66 @@
+---
+import Results from './Results.astro';
+import { formatRange } from '../lib/dates';
+import { workPath } from '../lib/work';
+import type { Experience } from '../content/schema';
+
+interface Props {
+  entry: Experience;
+}
+
+const { entry } = Astro.props;
+const meta = [entry.role, formatRange(entry.start, entry.end), entry.location].filter(Boolean);
+const results = entry.caseStudy?.results.slice(0, 4) ?? [];
+---
+
+<section class="wrap" aria-labelledby="lead-title" data-testid="lead" data-lead-id={entry.id}>
+  <div class="lead">
+    <p class="label">{entry.end ? 'Most recent' : 'Now'}</p>
+    <h2 id="lead-title">{entry.company}</h2>
+    <p class="meta">{meta.join(' · ')}</p>
+    {entry.summary && <p class="summary">{entry.summary}</p>}
+    {results.length > 0 && <Results results={results} />}
+    {entry.caseStudy && (
+      <p>
+        <a class="arrow-link" href={workPath(entry.id)}>
+          Read the {entry.company} case study
+          <span class="arrow" aria-hidden="true">
+            &rarr;
+          </span>
+        </a>
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  .lead {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: calc(var(--radius) * 1.5);
+  }
+
+  h2 {
+    font-size: var(--step-4);
+    margin-top: -0.5rem;
+  }
+
+  .meta {
+    color: var(--muted);
+    margin-top: -0.5rem;
+  }
+
+  .summary {
+    font-size: var(--step-2);
+    line-height: 1.4;
+    max-width: 44rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .lead > p:last-child {
+    margin-top: 0.75rem;
+  }
+</style>

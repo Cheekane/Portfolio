@@ -1,0 +1,198 @@
+---
+import '@fontsource-variable/inter/wght.css';
+import '@fontsource/instrument-serif/400.css';
+import '../styles/global.css';
+import { profile } from '../data/profile';
+
+interface Props {
+  /** Page title. Left out on the home page, which uses the name and title. */
+  title?: string;
+  description?: string;
+  /** Set on the 404 page so search engines skip it. */
+  noindex?: boolean;
+}
+
+const { title, description = profile.description, noindex = false } = Astro.props;
+
+const fullTitle = title ? `${title} | ${profile.name}` : `${profile.name} | ${profile.title}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
+
+const nav = [
+  { href: '/#experience', label: 'Experience' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#about', label: 'About' },
+  { href: '/#contact', label: 'Contact' },
+];
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.title,
+  url: Astro.site?.href,
+  email: `mailto:${profile.email}`,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'London',
+    addressRegion: 'Ontario',
+    addressCountry: 'CA',
+  },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: profile.education.school },
+  sameAs: [profile.links.linkedin, profile.links.github],
+};
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+
+    <meta name="theme-color" content="#f8f7f3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111210" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content={`${profile.name}, ${profile.title}, ${profile.location}`}
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(person)} />
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
+    <header class="site-header wrap">
+      <a class="home" href="/" aria-label={`${profile.name}, home`}>
+        {profile.name}
+      </a>
+      <nav aria-label="Main">
+        <ul>
+          {nav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="wrap">
+      <div class="site-footer">
+        <p>
+          &copy; {new Date().getFullYear()} {profile.name}
+        </p>
+        <ul>
+          <li>
+            <a href={`mailto:${profile.email}`}>Email</a>
+          </li>
+          <li>
+            <a href={profile.links.linkedin} rel="me noopener">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href={profile.links.github} rel="me noopener">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute;
+    left: var(--gutter);
+    top: -4rem;
+    z-index: 10;
+    padding: 0.5rem 0.875rem;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 6px;
+    text-decoration: none;
+  }
+
+  .skip:focus {
+    top: 0.75rem;
+  }
+
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 1.5rem;
+  }
+
+  .home {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+
+  nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+  }
+
+  nav a {
+    display: inline-block;
+    padding-block: 0.25rem;
+    font-size: 0.9375rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  nav a:hover {
+    color: var(--ink);
+  }
+
+  .site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    margin-top: clamp(4rem, 10vw, 8rem);
+    padding-block: 2rem 3rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+
+  .site-footer ul {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 30rem) {
+    nav ul {
+      column-gap: 1.125rem;
+    }
+  }
+</style>

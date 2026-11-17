@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # deploy_content.sh
-# Syncs this directory's static site content to the hosting bucket root
-# and invalidates the CloudFront cache.
+# Builds the site, syncs the build output folder (dist/) to the hosting
+# bucket root and invalidates the CloudFront cache.
 
 set -e
 set -o pipefail
@@ -27,13 +27,17 @@ if [[ ! "$ENVIRONMENT" =~ ^(dev|prod)$ ]]; then
   exit 1
 fi
 
-for cmd in aws jq; do
+for cmd in aws jq npm; do
   if ! command -v $cmd &>/dev/null; then
     echo "Error: $cmd is not installed." >&2
     exit 1
   fi
 done
 
+# Always run from the repository root, wherever the script is called from.
+cd "$(dirname "$0")"
+
+BUILD_DIR="dist"
 AWS_PROFILE="$ORGANIZATION"
 STACK_NAME="$ORGANIZATION-portfolio-portfolio-$ENVIRONMENT"
 
@@ -50,17 +54,30 @@ if [ -z "$BUCKET" ] || [ -z "$DISTRIBUTION_ID" ]; then
   exit 1
 fi
 
-echo "Syncing site content to s3://$BUCKET/ (root) ..."
-aws s3 sync . s3://"$BUCKET"/ \
+echo "Building the site into $BUILD_DIR/ ..."
+npm ci
+npm run build
+
+if [ ! -f "$BUILD_DIR/index.html" ]; then
+  echo "Error: $BUILD_DIR/index.html is missing. The build did not produce a site."
+  exit 1
+fi
+
+echo "Syncing $BUILD_DIR/ to s3://$BUCKET/ (root) ..."
+
+# Files under _astro/ have a content hash in their name, so browsers can
+# keep them for a year.
+aws s3 sync "$BUILD_DIR/_astro" s3://"$BUCKET"/_astro \
   --delete \
-  --exclude ".git/*" \
-  --exclude ".idea/*" \
-  --exclude ".gitignore" \
+  --cache-control "public, max-age=31536000, immutable" \
+  --profile "$AWS_PROFILE"
+
+# Everything else (HTML, sitemap, favicon) is checked again on each visit.
+aws s3 sync "$BUILD_DIR" s3://"$BUCKET"/ \
+  --delete \
+  --exclude "_astro/*" \
   --exclude ".DS_Store" \
-  --exclude "deploy_stack.sh" \
-  --exclude "deploy_content.sh" \
-  --exclude "portfolio.yaml" \
-  --exclude "README.md" \
+  --cache-control "public, max-age=0, must-revalidate" \
   --profile "$AWS_PROFILE"
 
 echo "Clearing CloudFront cache for $DISTRIBUTION_ID..."

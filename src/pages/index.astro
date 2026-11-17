@@ -1,0 +1,265 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import LeadFeature from '../components/LeadFeature.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import ProjectList from '../components/ProjectList.astro';
+import { profile } from '../data/profile';
+import { formatRange } from '../lib/dates';
+import { leadOf } from '../lib/order';
+import { getExperience, getProjects } from '../lib/work';
+
+const experience = await getExperience();
+const projects = await getProjects();
+const lead = leadOf(experience);
+const { education } = profile;
+---
+
+<Base>
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <p class="label kicker rise">
+      <span>{profile.title}</span>
+      <span>{profile.location}</span>
+    </p>
+    <h1 id="hero-title" class="rise" style="--i: 1">
+      {profile.name}
+    </h1>
+    <p class="tagline rise" style="--i: 2">
+      {profile.tagline}
+    </p>
+    <ul class="links rise" style="--i: 3">
+      <li>
+        <a class="arrow-link" href={`mailto:${profile.email}`}>
+          {profile.email}
+        </a>
+      </li>
+      <li>
+        <a class="arrow-link" href={profile.links.linkedin} rel="noopener">
+          LinkedIn
+        </a>
+      </li>
+      <li>
+        <a class="arrow-link" href={profile.links.github} rel="noopener">
+          GitHub
+        </a>
+      </li>
+      <li>
+        <a class="arrow-link" href="#resume">
+          Resume
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  {lead && <LeadFeature entry={lead} />}
+
+  <Section id="experience" title="Experience">
+    <ExperienceList entries={experience} />
+  </Section>
+
+  <Section id="projects" title="Projects">
+    <ProjectList projects={projects} />
+  </Section>
+
+  <Section id="skills" title="Skills">
+    <dl class="skills">
+      {profile.skills.map((group) => (
+        <div>
+          <dt>{group.label}</dt>
+          <dd>{group.items.join(', ')}</dd>
+        </div>
+      ))}
+    </dl>
+  </Section>
+
+  <Section id="education" title="Education">
+    <div class="education">
+      <h3>{education.school}</h3>
+      <p>{education.degree}</p>
+      <p class="muted">{formatRange(education.start, education.end)}</p>
+      <ul>
+        {education.honours.map((honour) => (
+          <li>{honour}</li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section id="about" title="About">
+    <div class="about">
+      {profile.about.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
+  </Section>
+
+  <Section id="resume" title="Resume">
+    <div class="resume">
+      <p>
+        <a class="arrow-link" href={profile.resume.view} rel="noopener">
+          Open the resume in Google Drive
+          <span class="arrow" aria-hidden="true">
+            &rarr;
+          </span>
+        </a>
+      </p>
+      <iframe
+        src={profile.resume.preview}
+        title={`Preview of ${profile.name}'s resume`}
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        allow="autoplay"
+      ></iframe>
+    </div>
+  </Section>
+
+  <Section id="contact" title="Contact">
+    <div class="contact">
+      <p class="big">The fastest way to reach me is email.</p>
+      <p>
+        <a class="email" href={`mailto:${profile.email}`}>
+          {profile.email}
+        </a>
+      </p>
+      <ul>
+        <li>
+          <a class="arrow-link" href={profile.links.linkedin} rel="noopener">
+            LinkedIn{' '}
+            <span class="arrow" aria-hidden="true">
+              &rarr;
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="arrow-link" href={profile.links.github} rel="noopener">
+            GitHub{' '}
+            <span class="arrow" aria-hidden="true">
+              &rarr;
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 1.25rem;
+    padding-block: clamp(3rem, 9vw, 7.5rem) clamp(3rem, 7vw, 5.5rem);
+  }
+
+  .kicker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.125rem 1.5rem;
+  }
+
+  h1 {
+    font-size: var(--step-5);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-left: -0.04em;
+  }
+
+  .tagline {
+    font-size: var(--step-2);
+    line-height: 1.4;
+    max-width: 40rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .skills {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .skills div {
+    display: grid;
+    gap: 0.125rem;
+  }
+
+  .skills dt {
+    font-weight: 500;
+  }
+
+  .skills dd {
+    color: var(--muted);
+    max-width: 42rem;
+  }
+
+  .education {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .education h3 {
+    font-size: var(--step-2);
+    line-height: 1.2;
+  }
+
+  .education ul {
+    margin-top: 0.75rem;
+    color: var(--muted);
+  }
+
+  .about {
+    display: grid;
+    gap: 1.125rem;
+    max-width: 40rem;
+    font-size: var(--step-1);
+  }
+
+  .resume {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+    max-width: 46rem;
+    aspect-ratio: 8.5 / 11;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+  }
+
+  .contact {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .big {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.15;
+    max-width: 36rem;
+    text-wrap: balance;
+  }
+
+  .email {
+    font-size: var(--step-2);
+    overflow-wrap: anywhere;
+  }
+
+  .contact ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.75rem;
+  }
+
+  @media (min-width: 40rem) {
+    .skills div {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: 2rem;
+    }
+  }
+</style>

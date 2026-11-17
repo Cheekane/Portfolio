@@ -1,0 +1,126 @@
+.cg {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.cg-grid {
+  display: grid;
+  gap: 1px;
+  width: 100%;
+  max-width: 30rem;
+  aspect-ratio: 1;
+  padding: 1px;
+  background: var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cg-row {
+  display: contents;
+}
+
+.cg-cell {
+  background: var(--surface);
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.cg-cell[aria-selected='true'] {
+  background: var(--accent);
+}
+
+.cg-cell:hover {
+  background: var(--accent-soft);
+}
+
+.cg-cell[aria-selected='true']:hover {
+  background: color-mix(in srgb, var(--accent) 80%, var(--surface));
+}
+
+.cg-cell:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline-offset: 1px;
+  border-radius: 1px;
+}
+
+.cg-panel {
+  display: grid;
+  gap: 1rem;
+  max-width: 30rem;
+}
+
+.cg-status {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.cg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cg-button,
+.cg-field select {
+  font: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  min-height: 2.5rem;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.cg-button {
+  min-width: 5.25rem;
+  font-weight: 500;
+}
+
+.cg-button:hover,
+.cg-field select:hover {
+  border-color: var(--muted);
+}
+
+.cg-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+
+.cg-primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.cg-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+.cg-field select {
+  padding-inline: 0.625rem;
+}
+
+.cg-help {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+@media (min-width: 56rem) {
+  .cg {
+    grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+}

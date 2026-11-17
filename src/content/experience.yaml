@@ -1,0 +1,160 @@
+# Experience, newest first.
+#
+# The order of this list is the order on the site. The first entry is the
+# lead feature at the top of the home page, so adding a newer job at the top
+# changes the lead with no layout edits.
+#
+# An entry with a `caseStudy` gets its own page at /work/<id>/.
+# Search for "TODO(brian)" to find slots that still need real content.
+
+- id: mealvue
+  company: MealVue
+  role: Full-Stack Software Developer
+  start: 2026-09
+  location: Remote
+  summary: >-
+    Part of the small team behind Mealvue Chef, a kitchen inventory, recipe and
+    meal planning app that is live on the App Store and Google Play.
+  caseStudy:
+    intro: >-
+      Mealvue Chef by MealLens Inc. is a kitchen inventory, recipe and meal
+      planning app. You scan a fridge shelf, a barcode or a receipt, and it
+      works out what you have, finds recipes, tracks expiry dates and builds a
+      shopping list.
+    facts:
+      - label: Team
+        value: Built by a small team. I work across the app and the API.
+      - label: Status
+        value: Live on the App Store (Sep 29, 2026) and Google Play (Oct 7, 2026)
+    problem:
+      - >-
+        The app was getting a full V2 redesign, and the existing code made that
+        harder than it needed to be. Single screens had grown to as many as
+        4,800 lines, and a large share of the codebase was no longer used.
+      - >-
+        It also felt slow. A tap took about 350 ms to respond, saving to the
+        device was slow, and expiry dates could show up a day early.
+    built:
+      - >-
+        Built the V2 redesign of the React Native and Expo app from Figma: 10
+        screens on a token-based design system.
+      - >-
+        Extended the Django REST and PostgreSQL API with meal plans, stock
+        baselines and typo-tolerant parsing.
+      - >-
+        Cut tap latency by stopping hidden tabs and unchanged rows from
+        re-rendering.
+      - >-
+        Switched local storage from AsyncStorage to MMKV to speed up writes to
+        disk.
+      - >-
+        Split monolithic screens into hooks and a service layer.
+      - >-
+        Removed dead code and unused endpoints, found with import-graph
+        reachability analysis.
+      - >-
+        Fixed a UTC time zone bug that showed expiry dates a day early, and an
+        iOS native crash when a sheet unmounted.
+    stack:
+      - label: App
+        items: [React Native, Expo]
+      - label: API and data
+        items: [Django REST Framework, PostgreSQL]
+      - label: Device storage
+        items: [MMKV]
+    results:
+      - value: 81%
+        label: lower tap latency, from 350 ms to 65 ms
+      - value: 24K+
+        label: lines of dead code removed, 29% of the codebase
+      - value: 99.9%
+        label: faster writes to disk after moving to MMKV
+      - value: 68%
+        label: fewer dependencies after splitting the largest screens
+    outcomes:
+      - 10 redesigned screens shipped on a token-based design system.
+      - 25 unused API endpoints removed.
+      - The expiry date bug and the iOS sheet crash are fixed.
+    links:
+      # TODO(brian): add the App Store link for Mealvue Chef.
+      - label: App Store
+        kind: store
+      # TODO(brian): add the Google Play link for Mealvue Chef.
+      - label: Google Play
+        kind: store
+    # TODO(brian): add store screenshots to src/assets/work and list them
+    # under `images` (file, alt, caption). Then delete this slot.
+    imageTodos:
+      - Mealvue Chef store screenshots
+
+- id: tim-hortons
+  company: Tim Hortons
+  start: 2026-05
+  end: 2026-08
+
+- id: jitto
+  company: Jitto
+  role: Full-Stack Software Engineer Intern
+  start: 2024-09
+  end: 2025-08
+  location: Etobicoke, Ontario
+  summary: >-
+    Led a data pipeline that replaced 10+ hours a week of manual price list
+    work, and repainted the online storefront with Tailwind CSS.
+  caseStudy:
+    intro: >-
+      A year-long internship with two main jobs. I was in charge of building a
+      data pipeline that uses tuned algorithms to extract price list data, and
+      I did the repaint and refactor of the online storefront using Tailwind
+      CSS.
+    facts:
+      - label: Role
+        value: Full-Stack Software Engineer Intern, Sep 2024 to Aug 2025
+      - label: Platform
+        value: $2.5M+ in revenue
+    problem:
+      - >-
+        Getting data out of price lists was manual work that took more than 10
+        hours every week.
+      - >-
+        The storefront needed a visual refresh, its pages loaded slower than
+        they should, and transaction flows had decimal-precision bugs in the
+        REST API.
+    built:
+      - >-
+        Led an AWS and Python data pipeline, built with Polars, that extracts
+        price list data with tuned algorithms.
+      - >-
+        Wrote unit tests that run in CI/CD on every push, with pull request
+        approval gated on the full suite passing.
+      - >-
+        Refactored React and TypeScript components and migrated the styling to
+        Tailwind CSS.
+      - >-
+        Wrote Bash scripts that trim dependencies out of AWS Lambda packages.
+      - >-
+        Fixed REST API decimal-precision bugs in transaction flows.
+    stack:
+      - label: Data pipeline
+        items: [Python, Polars, AWS Lambda, Bash]
+      - label: Storefront
+        items: [React, TypeScript, Tailwind CSS]
+      - label: Quality
+        items: [Unit tests, CI/CD]
+    results:
+      - value: 10+ hrs
+        label: of manual work removed every week
+      - value: 90%+
+        label: extraction accuracy from the pipeline
+      - value: 30%
+        label: faster load times on the storefront
+      - value: 99%
+        label: smaller AWS Lambda package
+    outcomes:
+      - Every pull request has to pass the full test suite before approval.
+      - Transaction amounts keep their decimal precision through the API.
+
+- id: baskin-robbins
+  company: Baskin Robbins
+  start: 2020-05
+  end: 2022-12

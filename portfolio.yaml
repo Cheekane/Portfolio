@@ -59,6 +59,29 @@ Resources:
         SigningBehavior: always
         SigningProtocol: sigv4
 
+  # The site is built as one folder per page (/work/jitto/index.html).
+  # A private S3 origin only serves exact object keys, so this function
+  # points folder-style URLs at the index.html inside them.
+  IndexRewriteFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub ${Organization}-portfolio-index-rewrite-${Environment}
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Maps /path/ and /path to /path/index.html
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          var uri = request.uri;
+          if (uri.endsWith('/')) {
+            request.uri = uri + 'index.html';
+          } else if (uri.substring(uri.lastIndexOf('/') + 1).indexOf('.') === -1) {
+            request.uri = uri + '/index.html';
+          }
+          return request;
+        }
+
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -92,6 +115,21 @@ Resources:
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # AWS managed: CachingOptimized
           OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf  # AWS managed: CORS-S3Origin
           Compress: true
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt IndexRewriteFunction.FunctionMetadata.FunctionARN
+
+        # The bucket is private, so a missing page comes back from S3 as 403.
+        # Show the site's own 404 page with the right status instead.
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 404
+            ResponsePagePath: /404.html
+            ErrorCachingMinTTL: 60
+          - ErrorCode: 404
+            ResponseCode: 404
+            ResponsePagePath: /404.html
+            ErrorCachingMinTTL: 60
 
 Outputs:
 

@@ -1,0 +1,230 @@
+# Projects, in the order they appear on the site.
+#
+# Every project gets its own page at /work/<id>/.
+# Images live in src/assets/work and are referenced by file name.
+
+- id: londonkpc
+  name: LondonKPC church website
+  years: 2024 to present
+  summary: >-
+    A church website that admins update themselves, running on a serverless
+    AWS backend that costs about $1 a month to host.
+  tags: [Next.js, TypeScript, Python, AWS]
+  cover:
+    file: londonkpc-home.jpg
+    alt: >-
+      Home page of the LondonKPC EM website, with a navigation bar, a welcome
+      heading over a photo of a seedling, and buttons to view events or get in
+      touch.
+  caseStudy:
+    intro: >-
+      The website for the English ministry of London KPC, a Korean Christian
+      church in London, Ontario. Visitors see events, the weekly bulletin, the
+      Sunday bus schedule, a photo gallery and the leadership team. Admins sign
+      in and manage all of it from the same pages.
+    facts:
+      - label: Reach
+        value: >-
+          Used by the English ministry of London KPC, a congregation of about
+          100 members
+      - label: Role
+        # TODO(brian): confirm this wording. The repos show a few other
+        # contributors, with most commits yours.
+        value: Main contributor, front end and back end
+      - label: Status
+        value: >-
+          The live site is in maintenance mode while work is done on it, so
+          this page describes it with a screenshot
+    problem:
+      - >-
+        A church site changes every week: a new bulletin, new events, new
+        photos, a changed bus schedule. Making those changes should not need a
+        developer, so admins do it from the site itself, behind a sign-in.
+      - >-
+        It also has to cost almost nothing to run, and it has to be safe to
+        change. That means a separate place to try things before they reach
+        the congregation.
+    built:
+      - >-
+        A static Next.js front end with pages for home, info (bulletin and bus
+        schedule), events, gallery and contact, served from S3 through
+        CloudFront.
+      - >-
+        Admin sign-in with Amazon Cognito. Signed-in admins can add, edit and
+        delete content on the same pages visitors see. Read endpoints are
+        public, write endpoints need a Cognito token.
+      - >-
+        A Python API of about 18 Lambda functions across 4 services (events,
+        gallery, info and leaders), one function per endpoint, behind API
+        Gateway.
+      - >-
+        A single DynamoDB table shared by every service, and S3 for uploaded
+        photos, bulletins and bus schedules.
+      - >-
+        All infrastructure as plain CloudFormation templates, deployed by Bash
+        scripts, with separate dev and prod environments.
+      - >-
+        A maintenance mode switch built on a CloudFront function. It turns on
+        in seconds with no rebuild, and gives admins a private link to check
+        the real site before turning it off.
+      - >-
+        Unit tests for the API with pytest and moto, which run without any AWS
+        access.
+    stack:
+      - label: Front end
+        items: [Next.js 16, React 19, TypeScript, Tailwind CSS 4, AWS Amplify]
+      - label: Back end
+        items: [Python 3.12, AWS Lambda, API Gateway, Cognito, DynamoDB, S3]
+      - label: Infrastructure
+        items: [CloudFormation, CloudFront, Bash]
+      - label: Testing
+        items: [pytest, moto]
+    results:
+      - value: ~$1
+        label: a month to host
+      - value: ~18
+        label: Lambda functions across 4 services
+      - value: '2'
+        label: environments, dev and prod
+      - value: ~100
+        label: members in the congregation it serves
+    links:
+      - label: londonkpcem.ca
+        href: https://londonkpcem.ca
+        kind: live
+        note: In maintenance mode right now
+    images:
+      - file: londonkpc-home.jpg
+        alt: >-
+          Home page of the LondonKPC EM website, with a navigation bar, a
+          welcome heading over a photo of a seedling, and buttons to view
+          events or get in touch.
+        caption: The home page, with the admin sign-in at the top right.
+    # TODO(brian): add screenshots of the events, gallery and admin editing
+    # screens while the live site is in maintenance mode. Then delete this slot.
+    imageTodos:
+      - LondonKPC events, gallery and admin screenshots
+
+- id: attendance-manager
+  name: AttendanceManager
+  years: 2023 to 2024
+  summary: >-
+    A web app for keeping attendance by group, with accounts, searchable
+    attendee lists and a MySQL database behind an Express API.
+  tags: [React, Express, MySQL, JWT]
+  cover:
+    file: attendance-cover.png
+    alt: >-
+      AttendanceManager dashboard with a sidebar for Dashboard, Attendees and
+      Settings, and three group cards that each have buttons for statistics
+      and notes.
+  caseStudy:
+    intro: >-
+      A full stack web app for tracking attendance. You sign in, create groups,
+      add attendees to a group, then search and edit them. I designed and built
+      all of it myself.
+    facts:
+      - label: Role
+        value: Sole author
+      - label: When
+        value: 2023 to 2024
+    problem:
+      - >-
+        Keeping attendance for several groups means the same chores every time:
+        a list of people for each group, a way to find one person quickly, and
+        a way to fix their details.
+      - >-
+        Those lists hold names, emails and phone numbers, so they need to sit
+        behind a sign-in.
+    built:
+      - >-
+        A dashboard that shows your groups as cards and lets you create and
+        delete them.
+      - >-
+        An attendees view for each group, with search, editing and paging.
+      - >-
+        Sign in and sign out with JWT authentication. Passwords are stored
+        encrypted.
+      - >-
+        An Express server with create, read, update and delete operations on a
+        MySQL database.
+    stack:
+      - label: Front end
+        items: [React, React Router, Axios, SCSS]
+      - label: Back end
+        items: [Node.js, Express, JWT]
+      - label: Data
+        items: [MySQL]
+    links:
+      - label: Source on GitHub
+        href: https://github.com/Cheekane/AttendanceManager
+        kind: code
+    images:
+      - file: attendance-dashboard.png
+        alt: >-
+          AttendanceManager dashboard with a sidebar for Dashboard, Attendees
+          and Settings, and three group cards that each have buttons for
+          statistics and notes.
+        caption: The dashboard lists every group as a card.
+      - file: attendance-attendees.png
+        alt: >-
+          Attendees view for one group, with a notes box, a search field and a
+          table with columns for first name, last name, email and phone number.
+        caption: >-
+          Each group has a searchable attendee table. The rows are cropped out
+          here because they hold contact details.
+
+- id: cell-growth-simulator
+  name: Cell Growth Simulator
+  years: '2024'
+  summary: >-
+    A small simulation of bacteria dividing across a petri dish grid. You can
+    play it right here on this site.
+  tags: [React, TypeScript]
+  cover:
+    file: cell-growth-cover.png
+    alt: >-
+      A 20 by 20 grid with a colony of filled cells growing out from the
+      centre.
+  caseStudy:
+    intro: >-
+      A simulation of bacterial cell division on a petri dish, drawn as a grid.
+      Every tick, each occupied cell divides into an empty space next to it.
+      The original is a React and TypeScript app, and the same rules run in
+      the demo below.
+    facts:
+      - label: Role
+        value: Sole author
+    problem:
+      - >-
+        The brief was a grid where each occupied cell divides into a
+        neighbouring space on a timer, with controls to start, pause and reset,
+        a way to change the speed, and cells you can click to add or remove
+        bacteria.
+      - >-
+        The interesting questions were small ones. Which direction does a cell
+        divide in? What happens when two cells want the same space? How do you
+        pause a clock that every cell depends on?
+    built:
+      - >-
+        Growth rules that check up, down, left and right, in that order, and
+        divide into the first empty space.
+      - >-
+        Each tick reads the old grid and writes a new one, so two cells can
+        never fight over a space and the result does not depend on timing.
+      - >-
+        One interval timer drives the whole grid. Changing the speed swaps the
+        interval, and pausing clears it.
+      - >-
+        Start, pause and reset buttons, a speed multiplier, a grid size
+        setting, and click to add or remove bacteria.
+      - >-
+        Keyboard controls: spacebar to start or pause, and R to reset.
+    stack:
+      - label: App
+        items: [React, TypeScript, CSS]
+    links:
+      - label: Source on GitHub
+        href: https://github.com/Cheekane/Cell-Growth-Simulation
+        kind: code
+    demo: cell-growth

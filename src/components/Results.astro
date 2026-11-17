@@ -1,0 +1,46 @@
+---
+interface Props {
+  results: readonly { value: string; label: string }[];
+}
+
+const { results } = Astro.props;
+---
+
+<dl class="results">
+  {results.map((result) => (
+    <div>
+      <dt>{result.label}</dt>
+      <dd>{result.value}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+    gap: 1.5rem 2rem;
+  }
+
+  .results div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.375rem;
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  dd {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  dt {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+</style>
