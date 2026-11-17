@@ -3,7 +3,7 @@
  * A hatched band across the full width of the window. It marks the few main
  * breaks of a page (for example between the introduction and the work), and
  * uses the same hatching as the side rails so the two read as one frame.
- * Where it crosses a rail the hatching stops, leaving a clear square.
+ * Where it crosses a rail, two hairlines mark the crossing out as a square.
  * Decoration only, so it is hidden from screen readers.
  */
 interface Props {
@@ -26,7 +26,7 @@ const { gap = false } = Astro.props;
     background: var(--hatch) var(--bg);
   }
 
-  /* The joint: a clear, outlined square where the band crosses each rail. */
+  /* The joint: an outlined, hatched square where the band crosses each rail. */
   .band::before,
   .band::after {
     content: '';
@@ -34,7 +34,6 @@ const { gap = false } = Astro.props;
     inset-block: 0;
     width: var(--rail);
     border-inline: 1px solid var(--frame-line);
-    background: var(--bg);
   }
 
   .band::before {
