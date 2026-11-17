@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
 import type { ImageMetadata } from 'astro';
 import { inListOrder } from './order';
-import type { CaseStudy, Experience, Project } from '../content/schema';
+import type { Detail, Experience, Project } from '../content/schema';
 
 export async function getExperience(): Promise<Experience[]> {
   return inListOrder((await getCollection('experience')).map((entry) => entry.data));
@@ -11,15 +11,15 @@ export async function getProjects(): Promise<Project[]> {
   return inListOrder((await getCollection('projects')).map((entry) => entry.data));
 }
 
-/** The shape a case study page needs, whether it is a job or a project. */
-export interface CaseStudyPage {
+/** The shape a detail page needs, whether it is a job or a project. */
+export interface DetailPage {
   id: string;
   kind: 'Experience' | 'Project';
   title: string;
   subtitle: string;
   period: string;
   description: string;
-  caseStudy: CaseStudy;
+  detail: Detail;
 }
 
 export function workPath(id: string): string {

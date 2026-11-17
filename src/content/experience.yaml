@@ -4,7 +4,7 @@
 # lead feature at the top of the home page, so adding a newer job at the top
 # changes the lead with no layout edits.
 #
-# An entry with a `caseStudy` gets its own page at /work/<id>/.
+# An entry with a `detail` gets its own page at /work/<id>/.
 # Search for "TODO(brian)" to find slots that still need real content.
 
 - id: mealvue
@@ -15,7 +15,7 @@
   summary: >-
     Part of the small team behind Mealvue Chef, a kitchen inventory, recipe and
     meal planning app that is live on the App Store and Google Play.
-  caseStudy:
+  detail:
     intro: >-
       Mealvue Chef by MealLens Inc. is a kitchen inventory, recipe and meal
       planning app. You scan a fridge shelf, a barcode or a receipt, and it
@@ -101,7 +101,7 @@
   summary: >-
     Led a data pipeline that replaced 10+ hours a week of manual price list
     work, and repainted the online storefront with Tailwind CSS.
-  caseStudy:
+  detail:
     intro: >-
       A year-long internship with two main jobs. I was in charge of building a
       data pipeline that uses tuned algorithms to extract price list data, and

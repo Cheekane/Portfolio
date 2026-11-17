@@ -15,7 +15,7 @@
     alt: >-
       A photo of a packed bookshelf with a red box drawn around each book spine
       that the detection model found.
-  caseStudy:
+  detail:
     intro: >-
       Photograph a bookshelf and get back a reviewed, confirmed list of books
       added to your personal library. A local model finds the spines, a vision
@@ -113,7 +113,7 @@
       Home page of the LondonKPC EM website, with a navigation bar, a welcome
       heading over a photo of a seedling, and buttons to view events or get in
       touch.
-  caseStudy:
+  detail:
     intro: >-
       The website for the English ministry of London KPC, a Korean Christian
       church in London, Ontario. Visitors see events, the weekly bulletin, the
@@ -215,7 +215,7 @@
       AttendanceManager dashboard with a sidebar for Dashboard, Attendees and
       Settings, and three group cards that each have buttons for statistics
       and notes.
-  caseStudy:
+  detail:
     intro: >-
       A full stack web app for tracking attendance. You sign in, create groups,
       add attendees to a group, then search and edit them. I designed and built
@@ -283,7 +283,7 @@
     alt: >-
       A 20 by 20 grid with a colony of filled cells growing out from the
       centre.
-  caseStudy:
+  detail:
     intro: >-
       A simulation of bacterial cell division on a petri dish, drawn as a grid.
       Every tick, each occupied cell divides into an empty space next to it.

@@ -7,15 +7,15 @@ import CellGrowth from '../../demo/cell-growth/CellGrowth';
 import { formatRange } from '../../lib/dates';
 import { joinFacts } from '../../lib/text';
 import { getExperience, getProjects, workImage, workPath } from '../../lib/work';
-import type { CaseStudyPage } from '../../lib/work';
+import type { DetailPage } from '../../lib/work';
 
 export const getStaticPaths = (async () => {
   const experience = await getExperience();
   const projects = await getProjects();
 
-  const pages: CaseStudyPage[] = [
+  const pages: DetailPage[] = [
     ...experience.flatMap((entry) =>
-      entry.caseStudy
+      entry.detail
         ? [
             {
               id: entry.id,
@@ -23,8 +23,8 @@ export const getStaticPaths = (async () => {
               title: entry.company,
               subtitle: joinFacts([entry.role, entry.location]),
               period: formatRange(entry.start, entry.end),
-              description: entry.summary ?? entry.caseStudy.intro,
-              caseStudy: entry.caseStudy,
+              description: entry.summary ?? entry.detail.intro,
+              detail: entry.detail,
             },
           ]
         : [],
@@ -36,24 +36,24 @@ export const getStaticPaths = (async () => {
       subtitle: joinFacts(project.tags),
       period: project.years,
       description: project.summary,
-      caseStudy: project.caseStudy,
+      detail: project.detail,
     })),
   ];
 
   return pages.map((page, index) => ({
     params: { id: page.id },
-    // The next case study in the list, wrapping around at the end.
+    // The next detail page in the list, wrapping around at the end.
     props: { page, next: pages[(index + 1) % pages.length] ?? page },
   }));
 }) satisfies GetStaticPaths;
 
 interface Props {
-  page: CaseStudyPage;
-  next: CaseStudyPage;
+  page: DetailPage;
+  next: DetailPage;
 }
 
 const { page, next } = Astro.props;
-const study = page.caseStudy;
+const study = page.detail;
 const showTodos = import.meta.env.DEV;
 const links = study.links.filter((link) => link.href);
 const todoLinks = study.links.filter((link) => !link.href);
@@ -65,7 +65,7 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
   description={page.description}
   section={page.kind === 'Project' ? 'projects' : 'experience'}
 >
-  <article data-testid="case-study" data-id={page.id}>
+  <article data-testid="detail-page" data-id={page.id}>
     <header class="wrap top">
       <p>
         <a class="back" href={page.kind === 'Project' ? '/#projects' : '/#experience'}>
@@ -88,7 +88,7 @@ const hasResults = study.results.length > 0 || study.outcomes.length > 0;
       </p>
 
       {(links.length > 0 || (showTodos && todoLinks.length > 0)) && (
-        <ul class="links" data-testid="case-links">
+        <ul class="links" data-testid="detail-links">
           {links.map((link) => (
             <li>
               <a class="button secondary" href={link.href} rel="noopener">

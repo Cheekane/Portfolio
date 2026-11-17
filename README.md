@@ -1,6 +1,6 @@
 # cheekane.com
 
-Brian Park's portfolio. A static site with a home page, one case study page per
+Brian Park's portfolio. A static site with a home page, one detail page per
 job or project, and a playable Cell Growth Simulator demo.
 
 ## Stack
@@ -32,17 +32,17 @@ Content is data. You should not need to touch a layout to update it.
 
 | To change                        | Edit                          |
 | -------------------------------- | ----------------------------- |
-| Jobs and their case studies      | `src/content/experience.yaml` |
-| Projects and their case studies  | `src/content/projects.yaml`   |
+| Jobs and their detail pages      | `src/content/experience.yaml` |
+| Projects and their detail pages  | `src/content/projects.yaml`   |
 | Name, links, skills, about, etc. | `src/data/profile.ts`         |
-| Case study and project images    | `src/assets/work/`            |
+| Job and project images           | `src/assets/work/`            |
 
 Three things worth knowing:
 
 1. **Order is the order in the file.** The first entry in `experience.yaml` is
    the lead feature at the top of the home page. Add a newer job at the top and
    it becomes the lead.
-2. **A case study page appears when an entry has a `caseStudy` block.** Its
+2. **A detail page appears when an entry has a `detail` block.** Its
    address is `/work/<id>/`. Jobs without one show as a single line.
 3. **The resume is not in this repo.** The site links to a file in Google Drive
    and embeds Drive's own preview. Upload a new version of that same file in
@@ -73,7 +73,7 @@ What the tests cover:
 - The growth rules of the Cell Growth Simulator.
 - The lead feature follows list order, so reordering the list changes the lead.
 - Every content file matches the schema and points at images that exist.
-- Navigation, every case study page, the 404 page, and the demo's buttons and keys.
+- Navigation, every detail page, the 404 page, and the demo's buttons and keys.
 - Light and dark themes, with an axe accessibility scan of every page in both.
 - No page overflows sideways at 320 px, and only the demo page ships JavaScript.
 

@@ -1,12 +1,12 @@
 import AxeBuilder from '@axe-core/playwright';
-import { caseStudies, expect, test } from './fixtures';
+import { detailPages, expect, test } from './fixtures';
 
 const themes = [
   { colorScheme: 'light', background: 'rgb(250, 250, 250)' },
   { colorScheme: 'dark', background: 'rgb(9, 9, 11)' },
 ] as const;
 
-const paths = ['/', ...caseStudies.map((study) => `/work/${study.id}/`), '/404.html'];
+const paths = ['/', ...detailPages.map((study) => `/work/${study.id}/`), '/404.html'];
 
 for (const theme of themes) {
   test.describe(`${theme.colorScheme} theme`, () => {

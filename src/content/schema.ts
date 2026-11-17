@@ -30,7 +30,7 @@ const stackGroup = z.object({
   items: z.array(z.string()).min(1),
 });
 
-export const caseStudySchema = z.object({
+export const detailSchema = z.object({
   // One or two sentences shown under the page title.
   intro: z.string(),
   // Short facts shown beside the intro (team, reach, status).
@@ -61,7 +61,7 @@ export const experienceSchema = z.object({
   location: z.string().optional(),
   // One line used in lists and in the lead feature.
   summary: z.string().optional(),
-  caseStudy: caseStudySchema.optional(),
+  detail: detailSchema.optional(),
 });
 
 export const projectSchema = z.object({
@@ -72,10 +72,10 @@ export const projectSchema = z.object({
   summary: z.string(),
   tags: z.array(z.string()).min(1),
   cover: image,
-  caseStudy: caseStudySchema,
+  detail: detailSchema,
 });
 
-export type CaseStudy = z.infer<typeof caseStudySchema>;
+export type Detail = z.infer<typeof detailSchema>;
 export type Experience = z.infer<typeof experienceSchema>;
 export type Project = z.infer<typeof projectSchema>;
 export type WorkLink = z.infer<typeof link>;

@@ -9,7 +9,7 @@ export const profile = {
   tagline:
     'I build and ship complete products: the mobile and web apps people use, and the APIs, data and cloud systems behind them.',
   description:
-    'Brian Park is a Full Stack Software Engineer in London, Ontario, Canada. Case studies of shipped work across React Native, React, Django, Python and AWS.',
+    'Brian Park is a Full Stack Software Engineer in London, Ontario, Canada. Shipped work across React Native, React, Django, Python and AWS, with what was built and the results.',
   email: 'brianpark1101@gmail.com',
   links: {
     linkedin: 'https://linkedin.com/in/brianpark1101',

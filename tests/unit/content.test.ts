@@ -46,7 +46,7 @@ describe('content files', () => {
     const files = [
       ...projects.map((project) => project.cover.file),
       ...[...experience, ...projects].flatMap(
-        (entry) => entry.caseStudy?.images.map((image) => image.file) ?? [],
+        (entry) => entry.detail?.images.map((image) => image.file) ?? [],
       ),
     ];
     for (const file of files) {

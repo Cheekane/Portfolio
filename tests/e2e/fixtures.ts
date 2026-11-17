@@ -19,7 +19,7 @@ interface Entry {
   id: string;
   company?: string;
   name?: string;
-  caseStudy?: unknown;
+  detail?: unknown;
 }
 
 const readList = (path: string) => parse(readFileSync(path, 'utf8')) as Entry[];
@@ -27,7 +27,7 @@ const readList = (path: string) => parse(readFileSync(path, 'utf8')) as Entry[];
 export const experience = readList('src/content/experience.yaml');
 export const projects = readList('src/content/projects.yaml');
 
-/** Every page that has a case study, as { id, title }. */
-export const caseStudies = [...experience.filter((entry) => entry.caseStudy), ...projects].map(
+/** Every job or project that has a detail page, as { id, title }. */
+export const detailPages = [...experience.filter((entry) => entry.detail), ...projects].map(
   (entry) => ({ id: entry.id, title: entry.company ?? entry.name ?? entry.id }),
 );

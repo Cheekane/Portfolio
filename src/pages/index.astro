@@ -115,32 +115,29 @@ const { education } = profile;
   </Section>
 
   <Section id="contact" title="Contact">
-    <div class="contact">
-      <p class="big">The fastest way to reach me is email.</p>
-      <p>
+    <ul class="contact">
+      <li>
         <a class="button" href={`mailto:${profile.email}`}>
           {profile.email}
         </a>
-      </p>
-      <ul>
-        <li>
-          <a class="arrow-link" href={profile.links.linkedin} rel="noopener">
-            LinkedIn{' '}
-            <span class="arrow" aria-hidden="true">
-              &rarr;
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="arrow-link" href={profile.links.github} rel="noopener">
-            GitHub{' '}
-            <span class="arrow" aria-hidden="true">
-              &rarr;
-            </span>
-          </a>
-        </li>
-      </ul>
-    </div>
+      </li>
+      <li>
+        <a class="button secondary" href={profile.links.linkedin} rel="noopener">
+          LinkedIn{' '}
+          <span class="arrow" aria-hidden="true">
+            &rarr;
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="button secondary" href={profile.links.github} rel="noopener">
+          GitHub{' '}
+          <span class="arrow" aria-hidden="true">
+            &rarr;
+          </span>
+        </a>
+      </li>
+    </ul>
   </Section>
 </Base>
 
@@ -258,25 +255,10 @@ const { education } = profile;
   }
 
   .contact {
-    display: grid;
-    gap: 1.25rem;
-    justify-items: start;
-  }
-
-  .big {
-    color: var(--ink);
-    font-size: var(--step-3);
-    font-weight: 650;
-    line-height: 1.2;
-    letter-spacing: -0.03em;
-    max-width: 36rem;
-    text-wrap: balance;
-  }
-
-  .contact ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   @media (min-width: 40rem) {

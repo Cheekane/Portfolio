@@ -21,10 +21,10 @@ const { entries } = Astro.props;
           <p class="role muted">{joinFacts([entry.role, entry.location])}</p>
         )}
         {entry.summary && <p class="summary">{entry.summary}</p>}
-        {entry.caseStudy && (
+        {entry.detail && (
           <p class="more">
             <a class="arrow-link" href={workPath(entry.id)}>
-              Case study<span class="visually-hidden">: {entry.company}</span>
+              See what I built<span class="visually-hidden"> at {entry.company}</span>
               <span class="arrow" aria-hidden="true">
                 &rarr;
               </span>

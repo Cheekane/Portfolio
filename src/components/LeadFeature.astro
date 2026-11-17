@@ -11,7 +11,7 @@ interface Props {
 
 const { entry } = Astro.props;
 const meta = [entry.role, formatRange(entry.start, entry.end), entry.location];
-const results = entry.caseStudy?.results.slice(0, 4) ?? [];
+const results = entry.detail?.results.slice(0, 4) ?? [];
 ---
 
 <section class="wrap" aria-labelledby="lead-title" data-testid="lead" data-lead-id={entry.id}>
@@ -25,10 +25,10 @@ const results = entry.caseStudy?.results.slice(0, 4) ?? [];
         <Results results={results} />
       </div>
     )}
-    {entry.caseStudy && (
+    {entry.detail && (
       <p>
         <a class="button" href={workPath(entry.id)}>
-          Read the {entry.company} case study
+          See what I built at {entry.company}
           <span class="arrow" aria-hidden="true">
             &rarr;
           </span>

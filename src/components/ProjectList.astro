@@ -33,6 +33,14 @@ const { projects } = Astro.props;
             <li>{tag}</li>
           ))}
         </ul>
+        <p class="more">
+          <a class="arrow-link" href={workPath(project.id)}>
+            View project<span class="visually-hidden">: {project.name}</span>
+            <span class="arrow" aria-hidden="true">
+              &rarr;
+            </span>
+          </a>
+        </p>
       </div>
     </li>
   ))}
@@ -90,6 +98,10 @@ const { projects } = Astro.props;
   h3 a:hover {
     color: var(--accent);
     text-decoration: none;
+  }
+
+  .more {
+    margin-top: 1rem;
   }
 
   .summary {

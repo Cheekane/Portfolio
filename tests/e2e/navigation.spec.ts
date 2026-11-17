@@ -1,4 +1,4 @@
-import { caseStudies, expect, test } from './fixtures';
+import { detailPages, expect, test } from './fixtures';
 
 test('home page shows who Brian is and how to reach him', async ({ page }) => {
   await page.goto('/');
@@ -57,8 +57,8 @@ test('the resume links to Google Drive and embeds its live preview', async ({ pa
   );
 });
 
-for (const study of caseStudies) {
-  test(`case study page: ${study.id}`, async ({ page }) => {
+for (const study of detailPages) {
+  test(`detail page: ${study.id}`, async ({ page }) => {
     await page.goto(`/work/${study.id}/`);
     await expect(page.getByRole('heading', { level: 1, name: study.title })).toBeVisible();
     for (const heading of ['The problem', 'What I built', 'Stack']) {
@@ -71,14 +71,14 @@ for (const study of caseStudies) {
   });
 }
 
-test('a project card opens its case study, and the back link returns home', async ({ page }) => {
+test('a project card opens its detail page, and the back link returns home', async ({ page }) => {
   await page.goto('/');
   await page
     .getByTestId('project-list')
-    .getByRole('link', { name: 'LondonKPC church website' })
+    .getByRole('link', { name: 'LondonKPC church website', exact: true })
     .click();
   await expect(page).toHaveURL(/\/work\/londonkpc\/$/);
-  await expect(page.getByTestId('case-links').getByRole('link')).toHaveAttribute(
+  await expect(page.getByTestId('detail-links').getByRole('link')).toHaveAttribute(
     'href',
     'https://londonkpcem.ca',
   );
@@ -86,20 +86,48 @@ test('a project card opens its case study, and the back link returns home', asyn
   await expect(page).toHaveURL(/\/#projects$/);
 });
 
-test('the next link walks through every case study and loops back', async ({ page }) => {
-  await page.goto(`/work/${caseStudies[0]!.id}/`);
-  for (const study of [...caseStudies.slice(1), caseStudies[0]!]) {
+test('the next link walks through every detail page and loops back', async ({ page }) => {
+  await page.goto(`/work/${detailPages[0]!.id}/`);
+  for (const study of [...detailPages.slice(1), detailPages[0]!]) {
     await page.getByRole('navigation', { name: 'More work' }).getByRole('link').click();
     await expect(page.getByRole('heading', { level: 1, name: study.title })).toBeVisible();
   }
 });
 
 test('unfinished TODO slots never reach the built site', async ({ page }) => {
-  for (const study of caseStudies) {
+  for (const study of detailPages) {
     await page.goto(`/work/${study.id}/`);
     await expect(page.locator('.todo-slot')).toHaveCount(0);
     await expect(page.locator('body')).not.toContainText('TODO');
   }
+});
+
+test('no built page uses the phrase "case study"', async ({ page }) => {
+  const paths = ['/', ...detailPages.map((study) => `/work/${study.id}/`), '/404.html'];
+  for (const path of paths) {
+    await page.goto(path);
+    // The full HTML, so titles, descriptions, alt text and labels are covered too.
+    expect(await page.content(), path).not.toMatch(/case[\s-]*stud(y|ies)/i);
+  }
+});
+
+test('the contact section shows the three ways to reach Brian', async ({ page }) => {
+  await page.goto('/');
+  const contact = page.locator('#contact');
+  await expect(contact.getByRole('link')).toHaveCount(3);
+  await expect(contact.getByRole('link', { name: 'brianpark1101@gmail.com' })).toHaveAttribute(
+    'href',
+    'mailto:brianpark1101@gmail.com',
+  );
+  await expect(contact.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute(
+    'href',
+    'https://linkedin.com/in/brianpark1101',
+  );
+  await expect(contact.getByRole('link', { name: 'GitHub' })).toHaveAttribute(
+    'href',
+    'https://github.com/cheekane',
+  );
+  await expect(contact.locator('p')).toHaveCount(0);
 });
 
 test('an unknown address shows the 404 page', async ({ page }) => {

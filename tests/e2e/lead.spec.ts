@@ -8,9 +8,9 @@ test('the lead feature is the first entry in experience.yaml', async ({ page }) 
   await expect(lead.getByRole('heading', { level: 2 })).toHaveText(first.company!);
 });
 
-test('the lead feature links to its case study', async ({ page }) => {
+test('the lead feature links to its detail page', async ({ page }) => {
   const first = experience[0]!;
-  test.skip(!first.caseStudy, 'The first entry has no case study.');
+  test.skip(!first.detail, 'The first entry has no detail page.');
   await page.goto('/');
   await page.getByTestId('lead').getByRole('link').click();
   await expect(page).toHaveURL(new RegExp(`/work/${first.id}/$`));
