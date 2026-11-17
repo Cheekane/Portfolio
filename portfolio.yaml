@@ -1,2 +1,111 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Hosting for cheekane.com: the personal portfolio, served from one private
+  S3 bucket via OAC and one CloudFront distribution. Cert is requested and
+  validated outside CloudFormation (certs aren't modeled as CFN resources
+  here); its ARN is resolved at deploy time and passed in as a parameter.
 
+Parameters:
+
+  Organization:
+    Type: String
+
+  Environment:
+    Type: String
+    Default: prod
+    AllowedValues: [ dev, prod ]
+
+  GlobalCertificateArn:
+    Type: String
+
+Resources:
+
+  # ---------- S3 ----------
+
+  HostingBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${Organization}-portfolio-${Environment}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  HostingBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref HostingBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub 'arn:aws:s3:::${HostingBucket}/*'
+            Condition:
+              StringEquals:
+                aws:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}
+
+  # ---------- CloudFront ----------
+
+  CloudFrontOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub ${Organization}-portfolio-oac-${Environment}
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultRootObject: index.html
+        PriceClass: PriceClass_100
+
+        Aliases:
+          - cheekane.com
+          - www.cheekane.com
+
+        ViewerCertificate:
+          AcmCertificateArn: !Ref GlobalCertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+
+        Origins:
+          - Id: !Sub ${Organization}-portfolio-s3-origin-${Environment}
+            DomainName: !GetAtt HostingBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
+            S3OriginConfig: { }
+
+        # Fully static site, so the AWS managed CachingOptimized policy is
+        # the right fit -- no reason for a custom policy.
+        DefaultCacheBehavior:
+          TargetOriginId: !Sub ${Organization}-portfolio-s3-origin-${Environment}
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [ GET, HEAD, OPTIONS ]
+          CachedMethods: [ GET, HEAD ]
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # AWS managed: CachingOptimized
+          OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf  # AWS managed: CORS-S3Origin
+          Compress: true
+
+Outputs:
+
+  HostingBucketName:
+    Value: !Ref HostingBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-HostingBucketName
+
+  CloudFrontDistributionId:
+    Value: !Ref CloudFrontDistribution
+    Export:
+      Name: !Sub ${AWS::StackName}-CloudFrontDistributionId
+
+  CloudFrontDistributionDomainName:
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    Export:
+      Name: !Sub ${AWS::StackName}-CloudFrontDistributionDomainName

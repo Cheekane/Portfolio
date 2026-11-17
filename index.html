@@ -642,8 +642,7 @@
     projects.forEach(p => {
         const card = document.createElement("div");
         card.className = "project-card";
-        card.innerHTML = `
-            <a href="${p.url}" target="_blank" rel="noopener" aria-label="View project: ${p.title}">
+        const imgSection = p.img ? `
                 <div class="project-img-wrap">
                     <img src="${p.img}" alt="${p.title}" class="project-img" loading="lazy">
                     <div class="project-img-overlay"></div>
@@ -652,7 +651,10 @@
                             <line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
                         </svg>
                     </div>
-                </div>
+                </div>` : "";
+        card.innerHTML = `
+            <a href="${p.url}" target="_blank" rel="noopener" aria-label="View project: ${p.title}">
+                ${imgSection}
                 <div class="project-info">
                     <h3 class="project-title">${p.title}</h3>
                     <p class="project-desc">${p.desc}</p>
