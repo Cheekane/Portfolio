@@ -24,7 +24,12 @@ function textFiles(dir: string): string[] {
 describe('content files', () => {
   it('match the schema', () => {
     expect(experience.length).toBeGreaterThan(0);
-    expect(projects).toHaveLength(3);
+    expect(projects.map((project) => project.id)).toEqual([
+      'shelfie',
+      'londonkpc',
+      'attendance-manager',
+      'cell-growth-simulator',
+    ]);
   });
 
   it('use each id once, because ids become page addresses', () => {

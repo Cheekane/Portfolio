@@ -14,6 +14,7 @@ const pages = {
   home: '/',
   mealvue: '/work/mealvue/',
   jitto: '/work/jitto/',
+  shelfie: '/work/shelfie/',
   londonkpc: '/work/londonkpc/',
   attendance: '/work/attendance-manager/',
   cell: '/work/cell-growth-simulator/',

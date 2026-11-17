@@ -3,6 +3,103 @@
 # Every project gets its own page at /work/<id>/.
 # Images live in src/assets/work and are referenced by file name.
 
+- id: shelfie
+  name: Shelfie
+  years: '2026'
+  summary: >-
+    A photo-to-library book scanner. Take one photo of a bookshelf and get back
+    a reviewed list of the books on it, for about $0.001 a book.
+  tags: [Django, React Native, YOLOv8, Gemini]
+  cover:
+    file: shelfie-detection.jpg
+    alt: >-
+      A photo of a packed bookshelf with a red box drawn around each book spine
+      that the detection model found.
+  caseStudy:
+    intro: >-
+      Photograph a bookshelf and get back a reviewed, confirmed list of books
+      added to your personal library. A local model finds the spines, a vision
+      language model reads each one, a fuzzy matcher scores the read against a
+      catalog, and anything uncertain goes to a person before it is saved.
+    facts:
+      - label: Role
+        value: Sole author
+      - label: Scope
+        value: Single user and local first. It runs on your own machine and is not deployed.
+    problem:
+      - >-
+        Typing a shelf of books into an app one at a time is slow. A photo
+        already holds every title, but spines are narrow, sideways and easy to
+        misread, and the same title can belong to two different books.
+      - >-
+        A wrong book added quietly is worse than a book that is missed. So the
+        design leans toward asking: an uncertain match goes to a review screen
+        instead of being confirmed automatically.
+      - >-
+        Reading the spines was also slow. One photo that needed 4 batches of
+        reads took about 41 seconds when the batches ran one after another.
+    built:
+      - >-
+        A computer vision pipeline that identifies books from a single
+        bookshelf photo: local YOLOv8n detection, Gemini reading the title and
+        author off each spine, and rapidfuzz fuzzy matching against a catalog.
+      - >-
+        A matcher that normalizes titles and authors, scores title and author
+        together, and forces a review when the top two candidates are too close
+        to call.
+      - >-
+        A human review queue. Low-confidence matches wait there to be
+        confirmed, corrected or discarded instead of being added on their own.
+      - >-
+        A Django REST Framework backend and an Expo and React Native mobile
+        app with screens to scan a shelf, review pending books and browse the
+        library.
+      - >-
+        Parallel reads. Batches for one photo now run at the same time on a
+        thread pool. Along the way I diagnosed a thread-safety race in the
+        shared API client and fixed it by giving each worker thread its own
+        client.
+      - >-
+        Cost tracking. Every scan reports its real cost, computed from the
+        token usage the API returns.
+      - >-
+        22 unit tests covering fuzzy-matching edge cases such as accents,
+        editions, shared titles, US and UK title variants and misread text.
+    stack:
+      - label: Mobile app
+        items: [React Native, Expo, TypeScript]
+      - label: Back end
+        items: [Django, Django REST Framework, SQLite]
+      - label: Vision and matching
+        items: [YOLOv8, Gemini, rapidfuzz]
+    results:
+      - value: ~75%
+        label: lower scan latency, from 41 s to between 8 and 19 s
+      - value: ~$0.001
+        label: per book, computed from real token usage
+      - value: '22'
+        label: unit tests on fuzzy-matching edge cases
+    outcomes:
+      - Uncertain matches always reach a person before they are saved.
+      - One failed read does not stop the rest of the photo from being reviewed.
+    links:
+      - label: Source on GitHub
+        href: https://github.com/Cheekane/Shelfie
+        kind: code
+    images:
+      - file: shelfie-detection.jpg
+        alt: >-
+          A photo of a packed bookshelf with a red box drawn around each book
+          spine that the detection model found.
+        caption: >-
+          Step one of a scan. Each red box is a spine found by the local
+          detection model, which is then cropped and read.
+    # TODO(brian): add screenshots of the mobile app (scan, review and library
+    # screens) to src/assets/work and list them under `images`. Then delete
+    # this slot.
+    imageTodos:
+      - Shelfie mobile app screenshots
+
 - id: londonkpc
   name: LondonKPC church website
   years: 2024 to present
